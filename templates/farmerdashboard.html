@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <!-- Load message -->
+    {% include 'alerts2.html' %}
+</div>
+FARMER
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <span class="badge badge-soft-primary float-right">Total</span>
+                        <h5 class="card-title mb-0">Total Due</h5>
+                    </div>
+                    <div class="row d-flex align-items-center mb-4">
+                        
+                            <h3 class="d-flex align-items-center ml-2 mb-0">
+                                Rs. 50000000
+                            </h3>
+                        
+                        
+                    </div>
+                </div>
+                <!--end card body-->
+            </div><!-- end card-->
+        </div> <!-- end col-->
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <span class="badge badge-soft-primary float-right">Clients</span>
+                        <h5 class="card-title mb-0">Total Clients</h5>
+                    </div>
+                    <div class="row d-flex align-items-center mb-4">
+                        <div class="col-8">
+                            <h3 class="d-flex align-items-center mb-0">
+                                {{clients.count}}
+                            </h3>
+                        </div>
+                       
+                    </div>
+                </div>
+                <!--end card body-->
+            </div><!-- end card-->
+        </div> <!-- end col-->
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <span class="badge badge-soft-primary float-right">Collector</span>
+                        <h5 class="card-title mb-0">Active Collectors</h5>
+                    </div>
+                    <div class="row d-flex align-items-center mb-4">
+                        
+                            <h3 class="d-flex align-items-center mb-0">
+                                {{ total_collector }}
+                            </h3>
+                        
+                        
+                    </div>
+                </div>
+                <!--end card body-->
+            </div>
+            <!--end card-->
+        </div> <!-- end col-->
+
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <span class="badge badge-soft-primary float-right">{{yesterday}} </span>
+                        <h5 class="card-title mb-0">Daily Collection</h5>
+                    </div>
+                    <div class="row d-flex align-items-center mb-4">
+                        <div class="col-8">
+                            <h3 class="d-flex align-items-center mb-0">
+                                 {{balance_difference}}
+                            </h3>
+                        </div>
+                       
+                    </div>
+                </div>
+                <!--end card body-->
+            </div><!-- end card-->
+        </div> <!-- end col-->
+    </div>
+    <!-- end row-->
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    
+                    <h4 class="card-title d-inline-block">Total Overdue</h4>
+
+                    {% comment %} <div id="morris-bar-example" class="morris-chart"></div> {% endcomment %}
+                    <!-- End Page-content -->
+                    <canvas id="collector-chart" width="200" height="100"></canvas>
+
+
+                    <div class="row text-center mt-4">
+                        <div class="col-6">
+                            <h4>Rs. {{total_overdue}}</h4>
+                            <p class="text-muted mb-0">Total Overdue</p>
+                        </div>
+                        <div class="col-6">
+                            <h4>{{total_collector}}</h4>
+                            <p class="text-muted mb-0">Collectors</p>
+                        </div>
+                    </div>
+
+                </div>
+                <!--end card body-->
+
+            </div>
+            <!--end card-->
+        </div>
+        <!--end col-->
+        
+        
+    </div>
+    <!--end row-->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                   
+                    <h4 class="card-title d-inline-block">Collector Overdue Trend (15 days)</h4>
+    
+                    <div id="line-chart"></div>
+    
+                    <div class="row text-center mt-4">
+                        <div class="col-12">
+                            <h4>Rs 450000</h4>
+                            <p class="text-muted mb-0">Total Recievable</p>
+                        </div>
+                        
+                    </div>
+    
+                </div>
+                <!--end card body-->
+    
+            </div>
+            <!--end card-->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                   
+                    <h4 class="card-title d-inline-block">Total Overdue</h4>
+    
+                    <div id="company-chart"></div>
+    
+                    <div class="row text-center mt-4">
+                        <div class="col-12">
+                            <h4>Rs 1200000 </h4>
+                            <p class="text-muted mb-0">Total Recievable</p>
+                        </div>
+                        
+                    </div>
+    
+                </div>
+                <!--end card body-->
+    
+            </div>
+            <!--end card-->
+        </div>
+    </div>
+</div> <!-- container-fluid -->
+
+
+
+{% endblock %}
