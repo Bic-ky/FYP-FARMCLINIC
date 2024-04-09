@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="row">
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-body">
+                <div class="p-3">
+                    <h3 class="text-uppercase" style="text-align:center;">Apply for appointment.</h3><b>
+                    <hr>
+                    <button class="btn btn-primary btn-rounded waves-effect waves-light" onclick="history.back()"><i class="fa fa-angle-left" aria-hidden="true"></i> Back</button>
+                    <br><br>
+                    <form action="{% url 'account:appointment' %}" method="POST" enctype="multipart/form-data" style="margin-bottom:50px;">
+                        {% csrf_token %}
+                        <div class="form-fields-set">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="field-holder">
+                                        <label>First Name *</label>
+                                        {{ form.first_name }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="field-holder">
+                                        <label>Last Name *</label><br>
+                                        {{ form.last_name }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="field-holder">
+                                        <label>Documents</label>
+                                        {{ form.documents }}
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="field-holder">
+                                        <label>Address</label>
+                                        {{ form.address }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="field-holder">
+                                        <label for="farm_image">Contact</label>
+                                        <br>
+                                        {{ form.contact }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="field-holder">
+                                        <label>Date</label>
+                                        {{ form.date }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="field-holder">
+                                        <label for="total_cost">Experts</label>
+                                        <br>
+                                        {{ form.experts }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="field-holder">
+                                        <button type="submit" class="btn btn-primary btn-rounded waves-effect waves-light" style="margin-top:20px;">
+                                            <i class="fa fa-check" aria-hidden="true"></i> Confirm
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+        <!--end card body-->
+    </div> <!-- end card-->
+</div> <!-- end col -->
+
+
+{% endblock %}

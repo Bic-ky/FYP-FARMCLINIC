@@ -11,7 +11,7 @@ from .models import User
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-from .forms import CustomPasswordChangeForm, LoginForm, RegistrationForm
+from .forms import AppointmentForm, CustomPasswordChangeForm, LoginForm, RegistrationForm
 from django.shortcuts import render, redirect
 from .forms import LoginForm
 
@@ -192,3 +192,31 @@ def expertdashboard(request):
 
 def farmerdashboard(request):
     return render(request , 'farmerdashboard.html')
+
+def chat(request):
+    return render(request , 'chat.html')
+
+def appointment(request):
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Process the form data
+            # Here you can access form.cleaned_data to get the validated form data
+            # For example:
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            documents = form.cleaned_data['documents']
+            address = form.cleaned_data['address']
+            contact = form.cleaned_data['contact']
+            date = form.cleaned_data['date']
+            experts = form.cleaned_data['experts']
+            
+            # You can then save the data to your database or perform any other actions
+            
+            # Redirect to a success page or return a response
+            # For example:
+            return render(request, 'success.html', {'form': form})
+    else:
+        form = AppointmentForm()
+   
+    return render(request , 'appointment.html', {'form': form})

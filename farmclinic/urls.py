@@ -27,4 +27,5 @@ urlpatterns = [
     path('home/' , views.index , name="index"),
     
     path('account/',include('account.urls')),
+    path('chat/',include('chat.urls')),
 ]

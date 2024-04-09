@@ -65,3 +65,19 @@ class User(AbstractBaseUser):
             user_role = 'FARMER'
         return user_role
     
+
+
+class Appointment(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    documents = models.FileField(upload_to='documents/', blank=True, null=True)
+    address = models.CharField(max_length=200)
+    contact = models.CharField(max_length=20)
+    date = models.DateField()
+    experts = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+    
+
+

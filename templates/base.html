@@ -20,13 +20,11 @@
         <link href="{% static "assets/css/theme.min.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "assets/plugins/switchery/switchery.min.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" %}" rel="stylesheet" type="text/css" />
-        <!-- Drofiy CSS -->
-        <link rel="stylesheet" href="{% static 'assets/plugins/dropify/dropify.min.css' %}">
          <!-- Plugins css -->
-        <link href="{% static "assets/plugins/datatables/dataTables.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
+        {% comment %} <link href="{% static "assets/plugins/datatables/dataTables.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "assets/plugins/datatables/responsive.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "assets/plugins/datatables/buttons.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
-        <link href="{% static "assets/plugins/datatables/select.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
+        <link href="{% static "assets/plugins/datatables/select.bootstrap4.css" %}" rel="stylesheet" type="text/css" /> {% endcomment %}
    
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -119,23 +117,23 @@
 
                             {% if user.role == user.EXPERT %}
                                 <li>
-                                    <a href="" class="waves-effect"><i class="mdi mdi-home-analytics"></i><span>Dashboard</span></a>
+                                    <a href="{% url "account:expertdashboard" %}" class="waves-effect"><i class="mdi mdi-home-analytics"></i><span>Dashboard</span></a>
                                 </li>
                                 <li>
                                     <a href="" class="waves-effect"><i class="mdi mdi-information-outline"></i><span>Information</span></a>
                                 </li>
                                 <li>
-                                    <a href="" class="waves-effect"><i class="mdi mdi-history"></i><span>Appointments</span></a>
+                                    <a href="{% url "account:appointment" %}" class="waves-effect"><i class="mdi mdi-history"></i><span>Appointments</span></a>
                                 </li>
                                 <li>
-                                    <a href="" class="waves-effect"><i class="mdi mdi-message"></i><span>Messages</span></a>
+                                    <a href="{% url "account:chat" %}" class="waves-effect"><i class="mdi mdi-message"></i><span>Messages</span></a>
                                 </li>
                                 <li>
                                     <a class="waves-effect" href="{% url "account:expert_change_password" %}"><i class="mdi mdi-security"></i><span>Change Password</span></a>
                                 </li>
                             {% elif user.role == user.FARMER %}
                                 <li>
-                                    <a href="" class="waves-effect"><i class="mdi mdi-home-analytics"></i><span>Dashboard</span></a>
+                                    <a href="{% url "account:farmerdashboard" %}" class="waves-effect"><i class="mdi mdi-home-analytics"></i><span>Dashboard</span></a>
                                 </li>
                                 <li>
                                     <a href="" class="waves-effect"><i class="mdi mdi-information"></i> <span>Information </span> <span style="margin-bottom:4px;" class="badge badge-danger badge-pill"></span></a>
@@ -180,7 +178,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="text-sm-right d-none d-sm-block">
-                                    Design & Develop by Bicky SIR
+                                    Design & Develop by Bicky 
                                 </div>
                             </div>
                         </div>
@@ -228,20 +226,6 @@
             });
         </script>
 
-        <!-- Sparkline Js-->
-        <script src="{% static "assets/plugins/jquery-sparkline/jquery.sparkline.min.js" %}"></script>
-
-        <!-- Chart Js-->
-        <script src="{% static "assets/plugins/jquery-knob/jquery.knob.min.js" %}"></script>
-
-        <!-- Chart Custom Js-->
-        <script src="{% static "assets/pages/knob-chart-demo.js" %}"></script>
-
-
-        <!-- Morris Js-->
-        <script src="{% static "assets/plugins/morris-js/morris.min.js" %}"></script>
-         <!-- Morris Custom Js-->
-        <script src="{% static "assets/pages/morris-chart-demo.js" %}"></script>
 
         <!-- Raphael Js-->
         <script src="{% static "assets/plugins/raphael/raphael.min.js" %}"></script>
@@ -253,7 +237,7 @@
         <script src="{% static "assets/js/theme.js" %}"></script>
 
         <!-- third party js -->
-        <script src="{% static "assets/plugins/datatables/jquery.dataTables.min.js" %}"></script>
+        {% comment %} <script src="{% static "assets/plugins/datatables/jquery.dataTables.min.js" %}"></script>
         <script src="{% static "assets/plugins/datatables/dataTables.bootstrap4.js" %}"></script>
         <script src="{% static "assets/plugins/datatables/dataTables.responsive.min.js" %}"></script>
         <script src="{% static "assets/plugins/datatables/responsive.bootstrap4.min.js" %}"></script>
@@ -265,7 +249,7 @@
         <script src="{% static "assets/plugins/datatables/dataTables.keyTable.min.js" %}"></script>
         <script src="{% static "assets/plugins/datatables/dataTables.select.min.js" %}"></script>
         <script src="{% static "assets/plugins/datatables/pdfmake.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/vfs_fonts.js" %}"></script>
+        <script src="{% static "assets/plugins/datatables/vfs_fonts.js" %}"></script> {% endcomment %}
         <script src="{% static "assets/plugins/switchery/switchery.min.js" %}"></script>
 
         <!-- Chart Js-->
