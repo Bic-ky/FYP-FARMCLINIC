@@ -15,6 +15,12 @@ from .forms import AppointmentForm, CustomPasswordChangeForm, LoginForm, Registr
 from django.shortcuts import render, redirect
 from .forms import LoginForm
 
+import json
+import urllib.request
+from django.shortcuts import render
+from django.http import HttpResponse
+import sys
+
 
 def index(request):
     return render(request, 'index.html' )
@@ -191,7 +197,31 @@ def expertdashboard(request):
     return render(request , 'expertdashboard.html')
 
 def farmerdashboard(request):
-    return render(request , 'farmerdashboard.html')
+    try: 
+        ResultBytes = urllib.request.urlopen("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/kathmandu%20%2C%20Nepal?unitGroup=metric&include=days%2Calerts&key=F7QME3Z9QPNC9CF24E95EY3QH&contentType=json")
+        
+        # Parse the results as JSON
+        jsonData = json.load(ResultBytes)
+
+        # Pass the JSON data to the template
+        context = {
+            "jsonData": jsonData
+        }
+
+        return render(request , "farmerdashboard.html", context)
+
+    except urllib.error.HTTPError as e:
+        ErrorInfo= e.read().decode() 
+        print('Error code: ', e.code, ErrorInfo)
+        
+    except urllib.error.URLError as e:
+        ErrorInfo= e.read().decode() 
+        print('Error code: ', e.code,ErrorInfo)
+        
+    return render(request , 'farmerdashboard.html', context)
+
+
+
 
 def chat(request):
     return render(request , 'chat.html')
@@ -220,3 +250,24 @@ def appointment(request):
         form = AppointmentForm()
    
     return render(request , 'appointment.html', {'form': form})
+
+
+
+        
+
+
+
+
+
+
+    
+
+
+
+        
+    
+
+
+
+
+
