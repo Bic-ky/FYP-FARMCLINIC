@@ -234,16 +234,16 @@ class TokenList(Token):
 
         if reverse:
             assert end is None
-            indexes = range(start - 2, -1, -1)
+            for idx in range(start - 2, -1, -1):
+                token = self.tokens[idx]
+                for func in funcs:
+                    if func(token):
+                        return idx, token
         else:
-            if end is None:
-                end = len(self.tokens)
-            indexes = range(start, end)
-        for idx in indexes:
-            token = self.tokens[idx]
-            for func in funcs:
-                if func(token):
-                    return idx, token
+            for idx, token in enumerate(self.tokens[start:end], start=start):
+                for func in funcs:
+                    if func(token):
+                        return idx, token
         return None, None
 
     def token_first(self, skip_ws=True, skip_cm=False):
@@ -413,28 +413,27 @@ class Statement(TokenList):
         Whitespaces and comments at the beginning of the statement
         are ignored.
         """
-        token = self.token_first(skip_cm=True)
-        if token is None:
+        first_token = self.token_first(skip_cm=True)
+        if first_token is None:
             # An "empty" statement that either has not tokens at all
             # or only whitespace tokens.
             return 'UNKNOWN'
 
-        elif token.ttype in (T.Keyword.DML, T.Keyword.DDL):
-            return token.normalized
+        elif first_token.ttype in (T.Keyword.DML, T.Keyword.DDL):
+            return first_token.normalized
 
-        elif token.ttype == T.Keyword.CTE:
+        elif first_token.ttype == T.Keyword.CTE:
             # The WITH keyword should be followed by either an Identifier or
             # an IdentifierList containing the CTE definitions;  the actual
             # DML keyword (e.g. SELECT, INSERT) will follow next.
-            tidx = self.token_index(token)
-            while tidx is not None:
-                tidx, token = self.token_next(tidx, skip_ws=True)
-                if isinstance(token, (Identifier, IdentifierList)):
-                    tidx, token = self.token_next(tidx, skip_ws=True)
+            fidx = self.token_index(first_token)
+            tidx, token = self.token_next(fidx, skip_ws=True)
+            if isinstance(token, (Identifier, IdentifierList)):
+                _, dml_keyword = self.token_next(tidx, skip_ws=True)
 
-                    if token is not None \
-                            and token.ttype == T.Keyword.DML:
-                        return token.normalized
+                if dml_keyword is not None \
+                        and dml_keyword.ttype == T.Keyword.DML:
+                    return dml_keyword.normalized
 
         # Hmm, probably invalid syntax, so return unknown.
         return 'UNKNOWN'

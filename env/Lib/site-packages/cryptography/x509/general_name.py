@@ -2,39 +2,46 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
-from __future__ import annotations
 
 import abc
 import ipaddress
 import typing
 from email.utils import parseaddr
 
+from cryptography import utils
 from cryptography.x509.name import Name
 from cryptography.x509.oid import ObjectIdentifier
 
-_IPAddressTypes = typing.Union[
-    ipaddress.IPv4Address,
-    ipaddress.IPv6Address,
-    ipaddress.IPv4Network,
-    ipaddress.IPv6Network,
-]
+
+_GENERAL_NAMES = {
+    0: "otherName",
+    1: "rfc822Name",
+    2: "dNSName",
+    3: "x400Address",
+    4: "directoryName",
+    5: "ediPartyName",
+    6: "uniformResourceIdentifier",
+    7: "iPAddress",
+    8: "registeredID",
+}
 
 
 class UnsupportedGeneralNameType(Exception):
-    pass
+    def __init__(self, msg, type):
+        super(UnsupportedGeneralNameType, self).__init__(msg)
+        self.type = type
 
 
 class GeneralName(metaclass=abc.ABCMeta):
-    @property
-    @abc.abstractmethod
-    def value(self) -> typing.Any:
+    @abc.abstractproperty
+    def value(self):
         """
         Return the value of the object
         """
 
 
 class RFC822Name(GeneralName):
-    def __init__(self, value: str) -> None:
+    def __init__(self, value: str):
         if isinstance(value, str):
             try:
                 value.encode("ascii")
@@ -55,18 +62,16 @@ class RFC822Name(GeneralName):
 
         self._value = value
 
-    @property
-    def value(self) -> str:
-        return self._value
+    value = utils.read_only_property("_value")
 
     @classmethod
-    def _init_without_validation(cls, value: str) -> RFC822Name:
+    def _init_without_validation(cls, value):
         instance = cls.__new__(cls)
         instance._value = value
         return instance
 
     def __repr__(self) -> str:
-        return f"<RFC822Name(value={self.value!r})>"
+        return "<RFC822Name(value={0!r})>".format(self.value)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, RFC822Name):
@@ -74,12 +79,15 @@ class RFC822Name(GeneralName):
 
         return self.value == other.value
 
+    def __ne__(self, other: object) -> bool:
+        return not self == other
+
     def __hash__(self) -> int:
         return hash(self.value)
 
 
 class DNSName(GeneralName):
-    def __init__(self, value: str) -> None:
+    def __init__(self, value: str):
         if isinstance(value, str):
             try:
                 value.encode("ascii")
@@ -94,18 +102,16 @@ class DNSName(GeneralName):
 
         self._value = value
 
-    @property
-    def value(self) -> str:
-        return self._value
+    value = utils.read_only_property("_value")
 
     @classmethod
-    def _init_without_validation(cls, value: str) -> DNSName:
+    def _init_without_validation(cls, value):
         instance = cls.__new__(cls)
         instance._value = value
         return instance
 
-    def __repr__(self) -> str:
-        return f"<DNSName(value={self.value!r})>"
+    def __repr__(self):
+        return "<DNSName(value={0!r})>".format(self.value)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DNSName):
@@ -113,12 +119,15 @@ class DNSName(GeneralName):
 
         return self.value == other.value
 
+    def __ne__(self, other: object) -> bool:
+        return not self == other
+
     def __hash__(self) -> int:
         return hash(self.value)
 
 
 class UniformResourceIdentifier(GeneralName):
-    def __init__(self, value: str) -> None:
+    def __init__(self, value: str):
         if isinstance(value, str):
             try:
                 value.encode("ascii")
@@ -133,18 +142,16 @@ class UniformResourceIdentifier(GeneralName):
 
         self._value = value
 
-    @property
-    def value(self) -> str:
-        return self._value
+    value = utils.read_only_property("_value")
 
     @classmethod
-    def _init_without_validation(cls, value: str) -> UniformResourceIdentifier:
+    def _init_without_validation(cls, value):
         instance = cls.__new__(cls)
         instance._value = value
         return instance
 
     def __repr__(self) -> str:
-        return f"<UniformResourceIdentifier(value={self.value!r})>"
+        return "<UniformResourceIdentifier(value={0!r})>".format(self.value)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, UniformResourceIdentifier):
@@ -152,23 +159,24 @@ class UniformResourceIdentifier(GeneralName):
 
         return self.value == other.value
 
+    def __ne__(self, other: object) -> bool:
+        return not self == other
+
     def __hash__(self) -> int:
         return hash(self.value)
 
 
 class DirectoryName(GeneralName):
-    def __init__(self, value: Name) -> None:
+    def __init__(self, value: Name):
         if not isinstance(value, Name):
             raise TypeError("value must be a Name")
 
         self._value = value
 
-    @property
-    def value(self) -> Name:
-        return self._value
+    value = utils.read_only_property("_value")
 
     def __repr__(self) -> str:
-        return f"<DirectoryName(value={self.value})>"
+        return "<DirectoryName(value={})>".format(self.value)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, DirectoryName):
@@ -176,23 +184,24 @@ class DirectoryName(GeneralName):
 
         return self.value == other.value
 
+    def __ne__(self, other: object) -> bool:
+        return not self == other
+
     def __hash__(self) -> int:
         return hash(self.value)
 
 
 class RegisteredID(GeneralName):
-    def __init__(self, value: ObjectIdentifier) -> None:
+    def __init__(self, value: ObjectIdentifier):
         if not isinstance(value, ObjectIdentifier):
             raise TypeError("value must be an ObjectIdentifier")
 
         self._value = value
 
-    @property
-    def value(self) -> ObjectIdentifier:
-        return self._value
+    value = utils.read_only_property("_value")
 
     def __repr__(self) -> str:
-        return f"<RegisteredID(value={self.value})>"
+        return "<RegisteredID(value={})>".format(self.value)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, RegisteredID):
@@ -200,12 +209,23 @@ class RegisteredID(GeneralName):
 
         return self.value == other.value
 
+    def __ne__(self, other: object) -> bool:
+        return not self == other
+
     def __hash__(self) -> int:
         return hash(self.value)
 
 
 class IPAddress(GeneralName):
-    def __init__(self, value: _IPAddressTypes) -> None:
+    def __init__(
+        self,
+        value: typing.Union[
+            ipaddress.IPv4Address,
+            ipaddress.IPv6Address,
+            ipaddress.IPv4Network,
+            ipaddress.IPv6Network,
+        ],
+    ):
         if not isinstance(
             value,
             (
@@ -223,22 +243,10 @@ class IPAddress(GeneralName):
 
         self._value = value
 
-    @property
-    def value(self) -> _IPAddressTypes:
-        return self._value
-
-    def _packed(self) -> bytes:
-        if isinstance(
-            self.value, (ipaddress.IPv4Address, ipaddress.IPv6Address)
-        ):
-            return self.value.packed
-        else:
-            return (
-                self.value.network_address.packed + self.value.netmask.packed
-            )
+    value = utils.read_only_property("_value")
 
     def __repr__(self) -> str:
-        return f"<IPAddress(value={self.value})>"
+        return "<IPAddress(value={})>".format(self.value)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, IPAddress):
@@ -246,12 +254,15 @@ class IPAddress(GeneralName):
 
         return self.value == other.value
 
+    def __ne__(self, other: object) -> bool:
+        return not self == other
+
     def __hash__(self) -> int:
         return hash(self.value)
 
 
 class OtherName(GeneralName):
-    def __init__(self, type_id: ObjectIdentifier, value: bytes) -> None:
+    def __init__(self, type_id: ObjectIdentifier, value: bytes):
         if not isinstance(type_id, ObjectIdentifier):
             raise TypeError("type_id must be an ObjectIdentifier")
         if not isinstance(value, bytes):
@@ -260,22 +271,22 @@ class OtherName(GeneralName):
         self._type_id = type_id
         self._value = value
 
-    @property
-    def type_id(self) -> ObjectIdentifier:
-        return self._type_id
-
-    @property
-    def value(self) -> bytes:
-        return self._value
+    type_id = utils.read_only_property("_type_id")
+    value = utils.read_only_property("_value")
 
     def __repr__(self) -> str:
-        return f"<OtherName(type_id={self.type_id}, value={self.value!r})>"
+        return "<OtherName(type_id={}, value={!r})>".format(
+            self.type_id, self.value
+        )
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, OtherName):
             return NotImplemented
 
         return self.type_id == other.type_id and self.value == other.value
+
+    def __ne__(self, other: object) -> bool:
+        return not self == other
 
     def __hash__(self) -> int:
         return hash((self.type_id, self.value))

@@ -10,16 +10,13 @@
         <meta content="Connecting Farmers and Agri-Experts " name="description" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="{% static "img/logo.png" %}">
-          <!-- Sweet Alerts css -->
-        <link href="{% static "assets/plugins/sweetalert2/sweetalert2.min.css" %}" rel="stylesheet" type="text/css" />
+
         <!-- App css -->
         <link href="{% static "assets/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "assets/css/theme.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "assets/css/icons.css" %}" rel="stylesheet" type="text/css" />
-        <link href="{% static "assets/css/icons.min.css"  %}"  rel="stylesheet" type="text/css" />
-        <link href="{% static "assets/css/theme.min.css" %}" rel="stylesheet" type="text/css" />
-        <link href="{% static "assets/plugins/switchery/switchery.min.css" %}" rel="stylesheet" type="text/css" />
-        <link href="{% static "assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" %}" rel="stylesheet" type="text/css" />
+        <link href="{% static "assets/css/chat.css" %}" rel="stylesheet" type="text/css" />
+
          <!-- Plugins css -->
         {% comment %} <link href="{% static "assets/plugins/datatables/dataTables.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "assets/plugins/datatables/responsive.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
@@ -193,7 +190,6 @@
 
         <!-- Overlay-->
         <div class="menu-overlay"></div>
-        
 
         <!-- jQuery  -->
         <script src="{% static "assets/js/jquery.min.js" %}"></script>
@@ -202,33 +198,7 @@
         <script src="{% static "assets/js/waves.js" %}"></script>
         <script src="{% static "assets/js/simplebar.min.js" %}"></script>
 
-        <!-- Drofiy Js -->
-        <script src="{% static 'assets/plugins/dropify/dropify.min.js' %}"></script>
-
-        <!-- Initialize Dropify -->
-        <script>
-            $(document).ready(function(){
-                // Initialize Dropify
-                $('.dropify').dropify();
-            });
-        </script>
-
-        <script>
-            $(document).ready(function() {
-                $('#basic-datatable').DataTable();
-            });
-        </script>
         
-
-        <script>
-            $(document).ready(function() {
-                $('#exampleModalScrollable').modal('show');
-            });
-        </script>
-
-
-        <!-- Raphael Js-->
-        <script src="{% static "assets/plugins/raphael/raphael.min.js" %}"></script>
 
         <!-- Custom Js -->
         {% comment %} <script src="{% static "assets/pages/dashboard-demo.js" %}"></script>  {% endcomment %}
@@ -236,33 +206,15 @@
         <!-- App js -->
         <script src="{% static "assets/js/theme.js" %}"></script>
 
-        <!-- third party js -->
-        {% comment %} <script src="{% static "assets/plugins/datatables/jquery.dataTables.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/dataTables.bootstrap4.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/dataTables.responsive.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/responsive.bootstrap4.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/dataTables.buttons.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/buttons.bootstrap4.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/buttons.html5.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/buttons.flash.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/buttons.print.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/dataTables.keyTable.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/dataTables.select.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/pdfmake.min.js" %}"></script>
-        <script src="{% static "assets/plugins/datatables/vfs_fonts.js" %}"></script> {% endcomment %}
-        <script src="{% static "assets/plugins/switchery/switchery.min.js" %}"></script>
-
-        <!-- Chart Js-->
-        <script src="{% static "assets/plugins/chart-js/chart.min.js" %}"></script>
-        
-         <!-- Sweet Alerts Js-->
-        <script src="{% static "assets/plugins/sweetalert2/sweetalert2.min.js" %}"></script>
-
         <!-- Chart Custom Js-->
         {% comment %} <script src="{% static "assets/pages/chartjs-demo.js" %}"></script> {% endcomment %}
 
         <!-- Include Select2 library -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+        
+        <script src="{% static 'assets/js/message.js' %}"></script>
 
 
     </body>

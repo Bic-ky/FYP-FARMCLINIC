@@ -2,28 +2,38 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
-from __future__ import annotations
 
+import struct
 import typing
 
 from cryptography import utils
-from cryptography.exceptions import AlreadyFinalized, InvalidKey
+from cryptography.exceptions import (
+    AlreadyFinalized,
+    InvalidKey,
+    UnsupportedAlgorithm,
+    _Reasons,
+)
+from cryptography.hazmat.backends import _get_backend
+from cryptography.hazmat.backends.interfaces import HMACBackend
+from cryptography.hazmat.backends.interfaces import HashBackend
 from cryptography.hazmat.primitives import constant_time, hashes, hmac
 from cryptography.hazmat.primitives.kdf import KeyDerivationFunction
 
 
 def _int_to_u32be(n: int) -> bytes:
-    return n.to_bytes(length=4, byteorder="big")
+    return struct.pack(">I", n)
 
 
 def _common_args_checks(
     algorithm: hashes.HashAlgorithm,
     length: int,
-    otherinfo: bytes | None,
-) -> None:
-    max_length = algorithm.digest_size * (2**32 - 1)
+    otherinfo: typing.Optional[bytes],
+):
+    max_length = algorithm.digest_size * (2 ** 32 - 1)
     if length > max_length:
-        raise ValueError(f"Cannot derive keys larger than {max_length} bits.")
+        raise ValueError(
+            "Can not derive keys larger than {} bits.".format(max_length)
+        )
     if otherinfo is not None:
         utils._check_bytes("otherinfo", otherinfo)
 
@@ -56,18 +66,26 @@ class ConcatKDFHash(KeyDerivationFunction):
         self,
         algorithm: hashes.HashAlgorithm,
         length: int,
-        otherinfo: bytes | None,
-        backend: typing.Any = None,
+        otherinfo: typing.Optional[bytes],
+        backend=None,
     ):
+        backend = _get_backend(backend)
+
         _common_args_checks(algorithm, length, otherinfo)
         self._algorithm = algorithm
         self._length = length
         self._otherinfo: bytes = otherinfo if otherinfo is not None else b""
 
+        if not isinstance(backend, HashBackend):
+            raise UnsupportedAlgorithm(
+                "Backend object does not implement HashBackend.",
+                _Reasons.BACKEND_MISSING_INTERFACE,
+            )
+        self._backend = backend
         self._used = False
 
     def _hash(self) -> hashes.Hash:
-        return hashes.Hash(self._algorithm)
+        return hashes.Hash(self._algorithm, self._backend)
 
     def derive(self, key_material: bytes) -> bytes:
         if self._used:
@@ -87,17 +105,21 @@ class ConcatKDFHMAC(KeyDerivationFunction):
         self,
         algorithm: hashes.HashAlgorithm,
         length: int,
-        salt: bytes | None,
-        otherinfo: bytes | None,
-        backend: typing.Any = None,
+        salt: typing.Optional[bytes],
+        otherinfo: typing.Optional[bytes],
+        backend=None,
     ):
+        backend = _get_backend(backend)
+
         _common_args_checks(algorithm, length, otherinfo)
         self._algorithm = algorithm
         self._length = length
         self._otherinfo: bytes = otherinfo if otherinfo is not None else b""
 
         if algorithm.block_size is None:
-            raise TypeError(f"{algorithm.name} is unsupported for ConcatKDF")
+            raise TypeError(
+                "{} is unsupported for ConcatKDF".format(algorithm.name)
+            )
 
         if salt is None:
             salt = b"\x00" * algorithm.block_size
@@ -106,10 +128,16 @@ class ConcatKDFHMAC(KeyDerivationFunction):
 
         self._salt = salt
 
+        if not isinstance(backend, HMACBackend):
+            raise UnsupportedAlgorithm(
+                "Backend object does not implement HMACBackend.",
+                _Reasons.BACKEND_MISSING_INTERFACE,
+            )
+        self._backend = backend
         self._used = False
 
     def _hmac(self) -> hmac.HMAC:
-        return hmac.HMAC(self._salt, self._algorithm)
+        return hmac.HMAC(self._salt, self._algorithm, self._backend)
 
     def derive(self, key_material: bytes) -> bytes:
         if self._used:

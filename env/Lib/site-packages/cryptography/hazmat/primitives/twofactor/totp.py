@@ -2,35 +2,41 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
-from __future__ import annotations
-
 import typing
 
+from cryptography.exceptions import UnsupportedAlgorithm, _Reasons
+from cryptography.hazmat.backends import _get_backend
+from cryptography.hazmat.backends.interfaces import HMACBackend
 from cryptography.hazmat.primitives import constant_time
 from cryptography.hazmat.primitives.twofactor import InvalidToken
 from cryptography.hazmat.primitives.twofactor.hotp import (
     HOTP,
-    HOTPHashTypes,
-    _generate_uri,
+    _ALLOWED_HASH_TYPES,
 )
+from cryptography.hazmat.primitives.twofactor.utils import _generate_uri
 
 
-class TOTP:
+class TOTP(object):
     def __init__(
         self,
         key: bytes,
         length: int,
-        algorithm: HOTPHashTypes,
+        algorithm: _ALLOWED_HASH_TYPES,
         time_step: int,
-        backend: typing.Any = None,
+        backend=None,
         enforce_key_length: bool = True,
     ):
-        self._time_step = time_step
-        self._hotp = HOTP(
-            key, length, algorithm, enforce_key_length=enforce_key_length
-        )
+        backend = _get_backend(backend)
+        if not isinstance(backend, HMACBackend):
+            raise UnsupportedAlgorithm(
+                "Backend object does not implement HMACBackend.",
+                _Reasons.BACKEND_MISSING_INTERFACE,
+            )
 
-    def generate(self, time: int | float) -> bytes:
+        self._time_step = time_step
+        self._hotp = HOTP(key, length, algorithm, backend, enforce_key_length)
+
+    def generate(self, time: typing.Union[int, float]) -> bytes:
         counter = int(time / self._time_step)
         return self._hotp.generate(counter)
 
@@ -39,7 +45,7 @@ class TOTP:
             raise InvalidToken("Supplied TOTP value does not match.")
 
     def get_provisioning_uri(
-        self, account_name: str, issuer: str | None
+        self, account_name: str, issuer: typing.Optional[str]
     ) -> str:
         return _generate_uri(
             self._hotp,

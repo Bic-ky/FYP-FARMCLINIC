@@ -2,20 +2,21 @@
 # 2.0, and the BSD License. See the LICENSE file in the root of this repository
 # for complete details.
 
-from __future__ import annotations
 
 import sys
-import typing
 
 from cryptography import utils
 from cryptography.exceptions import (
     AlreadyFinalized,
     InvalidKey,
     UnsupportedAlgorithm,
+    _Reasons,
 )
-from cryptography.hazmat.bindings._rust import openssl as rust_openssl
+from cryptography.hazmat.backends import _get_backend
+from cryptography.hazmat.backends.interfaces import ScryptBackend
 from cryptography.hazmat.primitives import constant_time
 from cryptography.hazmat.primitives.kdf import KeyDerivationFunction
+
 
 # This is used by the scrypt tests to skip tests that require more memory
 # than the MEM_LIMIT
@@ -24,22 +25,15 @@ _MEM_LIMIT = sys.maxsize // 2
 
 class Scrypt(KeyDerivationFunction):
     def __init__(
-        self,
-        salt: bytes,
-        length: int,
-        n: int,
-        r: int,
-        p: int,
-        backend: typing.Any = None,
+        self, salt: bytes, length: int, n: int, r: int, p: int, backend=None
     ):
-        from cryptography.hazmat.backends.openssl.backend import (
-            backend as ossl,
-        )
-
-        if not ossl.scrypt_supported():
+        backend = _get_backend(backend)
+        if not isinstance(backend, ScryptBackend):
             raise UnsupportedAlgorithm(
-                "This version of OpenSSL does not support scrypt"
+                "Backend object does not implement ScryptBackend.",
+                _Reasons.BACKEND_MISSING_INTERFACE,
             )
+
         self._length = length
         utils._check_bytes("salt", salt)
         if n < 2 or (n & (n - 1)) != 0:
@@ -56,6 +50,7 @@ class Scrypt(KeyDerivationFunction):
         self._n = n
         self._r = r
         self._p = p
+        self._backend = backend
 
     def derive(self, key_material: bytes) -> bytes:
         if self._used:
@@ -63,15 +58,8 @@ class Scrypt(KeyDerivationFunction):
         self._used = True
 
         utils._check_byteslike("key_material", key_material)
-
-        return rust_openssl.kdf.derive_scrypt(
-            key_material,
-            self._salt,
-            self._n,
-            self._r,
-            self._p,
-            _MEM_LIMIT,
-            self._length,
+        return self._backend.derive_scrypt(
+            key_material, self._salt, self._length, self._n, self._r, self._p
         )
 
     def verify(self, key_material: bytes, expected_key: bytes) -> None:
