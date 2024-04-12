@@ -9,20 +9,6 @@ from .models import User
 from django.core.exceptions import PermissionDenied
 from .models import User
 
-# def detectUser(user):
-#     if user.role == User.ADMIN:
-#             redirectUrl = 'account:expertdashboard'
-#     elif user.role == User.USER:
-#         redirectUrl = 'account:farmerdashboard'
-               
-#     elif user.role == None and user.is_superuser:
-#         redirectUrl = '/admin'
-#         return redirectUrl
-#     else:
-#         redirectUrl = None
-    
-#     return redirectUrl
-
 
 def send_verification_email(request, user, mail_subject, email_template):
     from_email = settings.DEFAULT_FROM_EMAIL
@@ -41,17 +27,3 @@ def send_verification_email(request, user, mail_subject, email_template):
 
 
 
-# Restrict the vendor from accessing the customer page
-def check_role_expert(user):
-    if user.role == 1:
-        return True
-    else:
-        raise PermissionDenied
-
-
-# Restrict the customer from accessing the vendor page
-def check_role_farmer(user):
-    if user.role == 2:
-        return True
-    else:
-        raise PermissionDenied

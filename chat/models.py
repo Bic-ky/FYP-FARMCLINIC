@@ -5,31 +5,31 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from account.models import User
+from django.db.models import Q
 
 
-class Contact(models.Model):
-    user = models.ForeignKey(
-        User, related_name='friends', on_delete=models.CASCADE)
-    friends = models.ManyToManyField('self', blank=True)
+class ThreadManager(models.Manager):
+    def by_user(self, **kwargs):
+        user = kwargs.get('user')
+        lookup = Q(first_person=user) | Q(second_person=user)
+        qs = self.get_queryset().filter(lookup).distinct()
+        return qs
 
-    def __str__(self):
-        return self.user.username
 
-
-class Message(models.Model):
-    contact = models.ForeignKey(
-        Contact, related_name='messages', on_delete=models.CASCADE)
-    content = models.TextField()
+class Thread(models.Model):
+    first_person = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='thread_first_person')
+    second_person = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,
+                                     related_name='thread_second_person')
+    updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.contact.user.username
+    objects = ThreadManager()
+    class Meta:
+        unique_together = ['first_person', 'second_person']
 
 
-class Chat(models.Model):
-    participants = models.ManyToManyField(
-        Contact, related_name='chats', blank=True)
-    messages = models.ManyToManyField(Message, blank=True)
-
-    def __str__(self):
-        return "{}".format(self.pk)
+class ChatMessage(models.Model):
+    thread = models.ForeignKey(Thread, null=True, blank=True, on_delete=models.CASCADE, related_name='chatmessage_thread')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)

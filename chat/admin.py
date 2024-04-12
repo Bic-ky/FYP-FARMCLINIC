@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from .models import Contact, Chat, Message
+from .models import Thread, ChatMessage
 
-admin.site.register(Chat)
-admin.site.register(Contact)
-admin.site.register(Message)
+admin.site.register(Thread)
+admin.site.register(ChatMessage)

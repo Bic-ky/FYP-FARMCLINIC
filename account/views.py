@@ -20,7 +20,24 @@ import urllib.request
 from django.shortcuts import render
 from django.http import HttpResponse
 import sys
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import PermissionDenied
 
+
+# Restrict the vendor from accessing the customer page
+def check_role_expert(user):
+    if user.role == 1:
+        return True
+    else:
+        raise PermissionDenied
+
+
+# Restrict the customer from accessing the vendor page
+def check_role_farmer(user):
+    if user.role == 2:
+        return True
+    else:
+        raise PermissionDenied
 
 def index(request):
     return render(request, 'index.html' )
@@ -196,9 +213,17 @@ def expert_change_password(request):
 def expertdashboard(request):
     return render(request , 'expertdashboard.html')
 
+
+@login_required
+@user_passes_test(check_role_farmer)
 def farmerdashboard(request):
+    user = request.user
+    city = user.city
+    country = user.country
     try: 
-        ResultBytes = urllib.request.urlopen("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/kathmandu%20%2C%20Nepal?unitGroup=metric&include=days%2Calerts&key=F7QME3Z9QPNC9CF24E95EY3QH&contentType=json")
+        url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}%20%2C%20{country}?unitGroup=metric&include=days%2Calerts&key=F7QME3Z9QPNC9CF24E95EY3QH&contentType=json"
+
+        ResultBytes = urllib.request.urlopen(url)
         
         # Parse the results as JSON
         jsonData = json.load(ResultBytes)
@@ -220,11 +245,6 @@ def farmerdashboard(request):
         
     return render(request , 'farmerdashboard.html', context)
 
-
-
-
-def chat(request):
-    return render(request , 'chat.html')
 
 def appointment(request):
     if request.method == 'POST':

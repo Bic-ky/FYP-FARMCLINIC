@@ -33,9 +33,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "chat",
+    
     "daphne",
     "account",
+    "chat",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -76,7 +77,7 @@ TEMPLATES = [
 
 
 
-WSGI_APPLICATION = 'farmclinic.wsgi.application'
+# WSGI_APPLICATION = 'farmclinic.wsgi.application'
 ASGI_APPLICATION = "farmclinic.asgi.application"
 
 CHANNEL_LAYERS = {

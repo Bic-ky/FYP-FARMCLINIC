@@ -1,19 +1,14 @@
-from django.contrib.auth import get_user_model
-from django.shortcuts import render, get_object_or_404
-from .models import Chat, Contact
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
-User = get_user_model()
-
-
-def get_last_10_messages(chatId):
-    chat = get_object_or_404(Chat, id=chatId)
-    return chat.messages.order_by('-timestamp').all()[:10]
+# Create your views here.
+from chat.models import Thread
 
 
-def get_user_contact(username):
-    user = get_object_or_404(User, username=username)
-    return get_object_or_404(Contact, user=user)
-
-
-def get_current_chat(chatId):
-    return get_object_or_404(Chat, id=chatId)
+@login_required
+def messages_page(request):
+    threads = Thread.objects.by_user(user=request.user).prefetch_related('chatmessage_thread').order_by('timestamp')
+    context = {
+        'Threads': threads
+    }
+    return render(request, 'messages.html', context)

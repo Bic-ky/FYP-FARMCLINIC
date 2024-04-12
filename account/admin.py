@@ -8,7 +8,7 @@ class CustomUserAdmin(UserAdmin):
     filter_horizontal = ()
     list_filter = ()
     fieldsets = (
-        (None, {'fields': ('phone_number', 'full_name','role','email','is_active')}),
+        (None, {'fields': ('phone_number', 'full_name','role','email', 'city', 'country', 'is_active')}),
         ('Permissions', {'fields': ('is_admin', 'is_staff', 'is_superuser')}),
     )
     add_fieldsets = (
