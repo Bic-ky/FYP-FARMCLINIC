@@ -1,110 +1,145 @@
-{% extends "base.html" %}
-
-{% block content %}
 {% load static %}
-<link href="{% static "assets/css/chat.css" %}" rel="stylesheet" type="text/css" />
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Chat</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js"></script>
 
+        <link rel="stylesheet" href="{% static 'assets/css/chat.css' %}">
 
-    <!-- Page header start -->
-    <div class="page-title">
-        <div class="row gutters float-right">
-            <div class="col-lg-12 col-lg-6 col-md-6 col-sm-12 col-12">
-                {% if user.is_authenticated %}
-                <h5 class="title">Logged In as : {{user}}</h5>
-                <input type="hidden" id="logged-in-user" value="{{ user.id }}">
-                {% endif %}
-            </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"> </div>
-        </div>
-    </div>
-    <!-- Page header end -->
-
-
-
-            <div class="col-xl-12 col-lg-12 bg-gray">
-
-                <div class="card m-0">
-
-                    <!-- Row start -->
-                    <div class="row no-gutters">
-                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
-
-                            {% comment %} CONTACT_BODY {% endcomment %}
-                            <div class="users-container contacts_body">
-                                    <div class="text-center">
-                                        <h1 class="text-center fw-bold text-primary">
-                                            <i class="fas fa-envelope"></i>&nbsp;Inbox
-                                        </h1>
-                                    </div>
-                                <ul class="users">
-                                    {% for thread in Threads %}
-                                    <li class="{% if forloop.first %}active{% endif %} contact-li person" chat-id="chat_{{ thread.id }}" data-chat="person5" style="cursor: pointer; background-color:#e5e5e5;">
-                                        <div class="user">
-                                            <img src="https://www.bootdey.com/img/Content/avatar/avatar5.png" alt="Retail Admin">
-                                            <span class="status away"></span>
+    </head>
+	<!--Coded With Love By Mutiullah Samim-->
+	<body>
+    {% if user.is_authenticated %}
+        <input type="hidden" id="logged-in-user" value="{{ user.id }}">
+    {% endif %}
+		<div class="container-fluid h-100">
+			<div class="row justify-content-center h-100 ">
+				<div class="col-md-4 col-xl-3 chat h-100 mt-4">
+                    <div class="card mb-sm-3 mb-md-0 contacts_card">
+					<div class="card-header">
+						{% comment %} <div class="input-group">
+							<input type="text" placeholder="Search..." name="" class="form-control search">
+							<div class="input-group-prepend">
+								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
+							</div>
+						</div> {% endcomment %}
+					</div>
+					<div class="card-body contacts_body">
+						<ui class="contacts">
+                            {% for thread in Threads %}
+                                <li class="{% if forloop.first %}active{% endif %} contact-li" chat-id="chat_{{ thread.id }}" style="cursor: pointer">
+                                    <div class="d-flex bd-highlight">
+                                        <div class="img_cont">
+                                            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="rounded-circle user_img">
                                         </div>
-                                        <p class="name-time">
+                                        <div class="user_info">
                                             {% if thread.first_person == user %}
                                                 <span>{{ thread.second_person.full_name }}</span>
                                             {% else %}
                                                 <span>{{ thread.first_person.full_name }}</span>
                                             {% endif %}
-                                        </p>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
-                        
-                            <div class="chat-container">
-                                {% for thread in Threads %}
-                                    <div class="messages-wrapper {% if forloop.first %}is_active{% else %}hide{% endif %}" chat-id="chat_{{ thread.id }}" other-user-id="
+
+{#                                            <p>Kalid is online</p>#}
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+						</ui>
+					</div>
+					<div class="card-footer"></div>
+				</div></div>
+				<div class="col-md-8 col-xl-6 chat h-100 mt-4">
+					<div class="card">
+                        {% for thread in Threads %}
+                            <div class="messages-wrapper  {% if forloop.first %}hide is_active{% else %}hide{% endif %}" chat-id="chat_{{ thread.id }}" other-user-id="
                                         {% if thread.first_person == user %}
                                             {{ thread.second_person.id }}
                                         {% else %}
                                             {{ thread.first_person.id }}
                                         {% endif %}
                                     ">
-                                        <div class="selected-user">
-                                            <span>To: <span class="name">
-                                                {% if thread.first_person == user %}
-                                                    {{ thread.second_person.full_name }}
-                                                {% else %}
-                                                    {{ thread.first_person.full_name }}
-                                                {% endif %}
-                                            </span></span>
+                                <div class="card-header msg_head">
+                                    <div class="d-flex bd-highlight">
+                                        <div class="img_cont">
+                                            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="rounded-circle user_img">
                                         </div>
-                                        <div class="card-body msg_card_body">
-                                            <!-- Messages will be appended here -->
+                                        <div class="user_info">
+                                            {% if thread.first_person == user %}
+                                                    <span>Chat with {{ thread.second_person.full_name }}</span>
+                                            {% else %}
+                                                <span>Chat with {{ thread.first_person.full_name }}</span>
+                                            {% endif %}
+
+                                            <p>{{ thread.chatmessage_thread.all.count }} messages</p>
                                         </div>
-                                        <div class="card-footer">
-                                            <form id="send-message-form">
-                                                <div class="input-group">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
-                                                    </div>
-                                                    <input type="text" name="" id="input-message" class="form-control type_msg p-4" placeholder="Type your message...">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-secondary" type="submit">
-                                                            <span class="input-group-text send_btn">
-                                                                <i class="fas fa-location-arrow"></i>
-                                                            </span>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                        <div class="video_cam">
+                                            <span><i class="fas fa-video"></i></span>
+                                            <span><i class="fas fa-phone"></i></span>
                                         </div>
                                     </div>
-                                {% endfor %}
+                                </div>
+
+                                <div class="card-body msg_card_body">
+                                    <!-- messages -->
+                                    {% for chat in thread.chatmessage_thread.all %}
+                                        {% if chat.user == user %}
+                                            <div class="d-flex mb-4 replied">
+                                                <div class="msg_cotainer_send">
+                                                    {{ chat.message }}
+                                                    <span class="msg_time_send">{{ chat.timestamp|date:"d D" }}, {{ chat.timestamp|time:"H:i" }}</span>
+                                                </div>
+                                            <div class="img_cont_msg">
+                                                <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="rounded-circle user_img_msg">
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                            <div class="d-flex mb-4 received">
+                                            <div class="img_cont_msg">
+                                                <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="rounded-circle user_img_msg">
+                                            </div>
+                                            <div class="msg_cotainer">
+                                                {{ chat.message }}
+                                                <span class="msg_time">{{ chat.timestamp|date:"d D" }}, {{ chat.timestamp|time:"H:i" }}</span>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+
+
+                                    <!-- messages -->
+                                </div>
+
+					        </div>
+                        {% endfor %}
+                        <div class="card-footer">
+                                <form id="send-message-form">
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+                                        </div>
+                                        <input type="text" name="" id="input-message" class="form-control type_msg" placeholder="Type your message...">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-secondary" type="submit">
+                                                <span class="input-group-text send_btn">
+                                                    <i class="fas fa-location-arrow"></i>
+                                                </span>
+                                            </button>
+
+                                        </div>
+                                </div>
+                                </form>
                             </div>
-                        </div>
                     </div>
-                    <!-- Row end -->
-                </div>
+				</div>
+			</div>
+		</div>
 
-            </div>
+        <script src="{% static 'assets/js/message.js' %}"></script>
 
-<script src="{% static 'assets/js/messages.js' %}"></script>
-{% endblock content %}
+	</body>
+</html>
