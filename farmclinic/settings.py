@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "account",
+    "channels",
     "chat",
-    'channels',
+    
     
     
 ]
@@ -56,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
 ROOT_URLCONF = "farmclinic.urls"
 AUTH_USER_MODEL = 'account.User'
 
@@ -70,6 +73,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'account.context_processors.get_google_api',
             ],
         },
     },
@@ -77,7 +81,7 @@ TEMPLATES = [
 
 
 
-# WSGI_APPLICATION = 'farmclinic.wsgi.application'
+WSGI_APPLICATION = 'farmclinic.wsgi.application'
 ASGI_APPLICATION = 'farmclinic.asgi.application'
 
 # CHANNEL_LAYERS = {
@@ -173,3 +177,6 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
+
+
+GOOGLE_API_KEY = config('GOOGLE_API')

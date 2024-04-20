@@ -20,7 +20,7 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['phone_number', 'role', 'full_name', 'email', 'password']
+        fields = ['phone_number', 'role', 'full_name', 'email', 'password','address', 'country', 'city', 'latitude' , 'longitude']
 
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):

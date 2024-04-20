@@ -15,7 +15,9 @@
         <link href="{% static "assets/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "assets/css/theme.css" %}" rel="stylesheet" type="text/css" />
         <link href="{% static "assets/css/icons.css" %}" rel="stylesheet" type="text/css" />
-        <link href="{% static "assets/css/chat.css" %}" rel="stylesheet" type="text/css" />
+        <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places&callback=initAutoComplete" async defer></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        
 
          <!-- Plugins css -->
         {% comment %} <link href="{% static "assets/plugins/datatables/dataTables.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
@@ -117,13 +119,10 @@
                                     <a href="{% url "account:expertdashboard" %}" class="waves-effect"><i class="mdi mdi-home-analytics"></i><span>Dashboard</span></a>
                                 </li>
                                 <li>
-                                    <a href="" class="waves-effect"><i class="mdi mdi-information-outline"></i><span>Information</span></a>
-                                </li>
-                                <li>
                                     <a href="{% url "account:appointment" %}" class="waves-effect"><i class="mdi mdi-history"></i><span>Appointments</span></a>
                                 </li>
                                 <li>
-                                    <a href="{% url "account:chat" %}" class="waves-effect"><i class="mdi mdi-message"></i><span>Messages</span></a>
+                                    <a href="{% url "chat:message" %}" class="waves-effect"><i class="mdi mdi-message"></i><span>Messages</span></a>
                                 </li>
                                 <li>
                                     <a class="waves-effect" href="{% url "account:expert_change_password" %}"><i class="mdi mdi-security"></i><span>Change Password</span></a>
@@ -133,13 +132,10 @@
                                     <a href="{% url "account:farmerdashboard" %}" class="waves-effect"><i class="mdi mdi-home-analytics"></i><span>Dashboard</span></a>
                                 </li>
                                 <li>
-                                    <a href="" class="waves-effect"><i class="mdi mdi-information"></i> <span>Information </span> <span style="margin-bottom:4px;" class="badge badge-danger badge-pill"></span></a>
+                                    <a href="" class="waves-effect"><i class="feather-user"></i><span>Appointment</span></a>
                                 </li>
                                 <li>
-                                    <a href="" class="waves-effect"><i class="feather-user"></i><span>Book Appointment</span></a>
-                                </li>
-                                <li>
-                                    <a href="" class="waves-effect"><i class="feather-user"></i><span>Messages</span></a>
+                                    <a href="{% url "chat:message" %}" class="waves-effect"><i class="feather-user"></i><span>Messages</span></a>
                                 </li>
                                 <li>
                                     <a class="waves-effect" href="{% url "account:farmer_change_password" %}"><i class="mdi mdi-security"></i><span>Change Password</span></a>

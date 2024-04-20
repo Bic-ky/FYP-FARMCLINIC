@@ -36,8 +36,11 @@ class User(AbstractBaseUser):
     full_name = models.CharField(max_length=50,blank=True)
     email = models.EmailField(max_length=100, unique=False, default="")
 
+    address = models.CharField(max_length=50,blank=True)
     city = models.CharField(max_length=50,blank=True)
     country = models.CharField(max_length=50,blank=True)
+    latitude = models.CharField(max_length=50,blank=True)
+    longitude = models.CharField(max_length=50,blank=True)
     
     created_date = models.DateTimeField(default=timezone.now)
     modified_date = models.DateTimeField(auto_now=True)

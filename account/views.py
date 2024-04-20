@@ -39,6 +39,32 @@ def check_role_farmer(user):
     else:
         raise PermissionDenied
 
+
+def detectUser(user):
+    if user.role == User.EXPERT:
+        return 'account:expertdashboard'
+    elif user.role == User.FARMER:
+        return 'account:farmerdashboard'
+    else:
+        return None
+
+
+def myAccount(request):
+    user = request.user
+    if user.is_authenticated:
+        redirect_url = detectUser(user)
+        if redirect_url:
+            return redirect(redirect_url)
+        else:
+            messages.error(request, 'Unable to determine dashboard for the user.')
+            return redirect('account:login')
+    else:
+        messages.error(request, 'You need to log in to access your account.')
+        return redirect('account:login')
+    
+
+
+
 def index(request):
     return render(request, 'index.html' )
 
@@ -84,29 +110,6 @@ def login_view(request):
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
-
-
-def myAccount(request):
-    user = request.user
-    if user.is_authenticated:
-        redirect_url = detectUser(user)
-        if redirect_url:
-            return redirect(redirect_url)
-        else:
-            messages.error(request, 'Unable to determine dashboard for the user.')
-            return redirect('account:login')
-    else:
-        messages.error(request, 'You need to log in to access your account.')
-        return redirect('account:login')
-    
-
-def detectUser(user):
-    if user.role == User.EXPERT:
-        return 'account:expertdashboard'
-    elif user.role == User.FARMER:
-        return 'account:farmerdashboard'
-    else:
-        return None
 
     
 #Logout
@@ -214,7 +217,6 @@ def expertdashboard(request):
     return render(request , 'expertdashboard.html')
 
 
-@login_required
 @user_passes_test(check_role_farmer)
 def farmerdashboard(request):
     user = request.user
