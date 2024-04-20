@@ -74,6 +74,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 'account.context_processors.get_google_api',
+                'account.context_processors.get_soil_api',
             ],
         },
     },
@@ -180,3 +181,5 @@ EMAIL_USE_TLS = True
 
 
 GOOGLE_API_KEY = config('GOOGLE_API')
+
+SOIL_NARC_API = config('SOIL_NARC_API')

@@ -18,6 +18,8 @@
     <link href="{% static "assets/css/theme.css" %}" rel="stylesheet" type="text/css" />
     <link href="{% static "assets/css/icons.css" %}" rel="stylesheet" type="text/css" />
     <link href="{% static "assets/css/theme.min.css" %}" rel="stylesheet" type="text/css" />
+    <script src="{% static "assets/js/location_picker.js" %}"></script>
+
 
 </head>
 
@@ -47,13 +49,9 @@
                                         <form class="user" action="{% url 'account:register' %}" method="post">
                                             {% csrf_token %}
                                             <div class="form-group row">
-                                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <div class="col-lg-12 mb-3 mb-sm-0">
                                                     <label for="id_full_name">Full Name:</label>
                                                     <input type="text" class="form-control form-control-user" name="full_name" id="id_full_name" placeholder="Full Name">
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <label for="id_phone_number">Phone Number:</label>
-                                                    <input type="text" class="form-control form-control-user" name="phone_number" id="id_phone_number" placeholder="Phone Number">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -67,6 +65,12 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
+                                                
+                                                <div class="col-sm-6">
+                                                    <label for="id_phone_number">Phone Number:</label>
+                                                    <input type="text" class="form-control form-control-user" name="phone_number" id="id_phone_number" placeholder="Phone Number">
+                                                </div>
+
                                                 <div class="col-sm-6">
                                                     <label for="id_role">Role:</label>
                                                     <select class="form-control form-control-user" name="role" id="id_role">
@@ -76,41 +80,45 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group row">
+                                            <div class="col-lg-12  mb-3 mb-sm-0">
                                                 <div class="field-holder">
-                                                    <label>Address *</label>
-                                                    {{profile_form.address}}
+                                                    <label for="id_address">Address *</label>
+                                                    <input type="text" class="form-control form-control-user" name="address" id="id_address" placeholder="Address">
                                                     <small class="text-muted float-right">powered by Google</small>
                                                 </div>
                                             </div>
-                                            
-
+                                         </div>
+                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                 <div class="field-holder">
-                                                    <label>Country *</label>
-                                                    {{profile_form.country}}
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                <div class="field-holder">
-                                                    <label>City *</label>
-                                                    {{profile_form.city}}
+                                                    <label for="id_country">Country *</label>
+                                                    <input type="text" class="form-control form-control-user" name="country" id="id_country" placeholder="Country">
                                                 </div>
                                             </div>
                                             
                                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                 <div class="field-holder">
-                                                    <label>Latitude *</label>
-                                                    {{profile_form.latitude}}
+                                                    <label for="id_city">City *</label>
+                                                    <input type="text" class="form-control form-control-user" name="city" id="id_city" placeholder="City">
                                                 </div>
                                             </div>
-
+                                        </div>
+                                        <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                 <div class="field-holder">
-                                                    <label>Longitude *</label>
-                                                    {{profile_form.longitude}}
+                                                    <label for="id_latitude">Latitude *</label>
+                                                    <input type="text" class="form-control form-control-user" name="latitude" id="id_latitude" placeholder="Latitude">
                                                 </div>
                                             </div>
+                                        
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <div class="field-holder">
+                                                    <label for="id_longitude">Longitude *</label>
+                                                    <input type="text" class="form-control form-control-user" name="longitude" id="id_longitude" placeholder="Longitude">
+                                                </div>
+                                            </div>
+                                        </div> 
                                             <button type="submit" class="btn btn-success btn-block waves-effect waves-light">Register Account</button>
                                         </form>
                                         
@@ -133,7 +141,31 @@
         <!-- end container -->
     </div>
     <!-- end page -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places"></script>
+<script>
+    function initializeAutocomplete() {
+        var input = document.getElementById('id_address');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            document.getElementById('id_latitude').value = place.geometry.location.lat();
+            document.getElementById('id_longitude').value = place.geometry.location.lng();
+            var addressComponents = place.address_components;
+            for (var i = 0; i < addressComponents.length; i++) {
+                if (addressComponents[i].types[0] === 'country') {
+                    document.getElementById('id_country').value = addressComponents[i].long_name;
+                }
+                if (addressComponents[i].types[0] === 'locality') {
+                    document.getElementById('id_city').value = addressComponents[i].long_name;
+                }
+            }
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initializeAutocomplete);
+</script>
 
+
+    
     <!-- jQuery  -->
     <script src="{% static "assets/js/jquery.min.js" %}"></script>
     <script src="{% static "assets/js/bootstrap.bundle.min.js" %}"></script>

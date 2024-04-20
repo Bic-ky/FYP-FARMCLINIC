@@ -22,6 +22,12 @@ class RegistrationForm(forms.ModelForm):
         model = User
         fields = ['phone_number', 'role', 'full_name', 'email', 'password','address', 'country', 'city', 'latitude' , 'longitude']
 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})
+
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
