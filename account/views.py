@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
+import requests
 
 from .models import User
 
@@ -223,6 +224,8 @@ def farmerdashboard(request):
     user = request.user
     city = user.city
     country = user.country
+    lat = user.latitude
+    lon = user.longitude
     try: 
         url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}%20%2C%20{country}?unitGroup=metric&include=days%2Calerts&key=F7QME3Z9QPNC9CF24E95EY3QH&contentType=json"
 
@@ -231,9 +234,24 @@ def farmerdashboard(request):
         # Parse the results as JSON
         jsonData = json.load(ResultBytes)
 
+        access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzNzA5MzU2LCJpYXQiOjE3MTM3MDkwNTYsImp0aSI6ImQ5N2JkNDg4ODczOTQ4MzJhZGYzMTA1NTE4OWRjNGNjIiwidXNlcl9pZCI6NTB9.HjH-FQGqOQmIXozf1StpWDYLSMIRhw7oJm80kMc-R1c'
+        
+        # URL of the API endpoint
+        url = f"https://soil.narc.gov.np/soil/soildata/?lon={lon}&lat={lat}"
+        
+        # Construct the headers with the access token
+        headers = {'Authorization': f'Bearer {access_token}'}
+        
+        # Make the GET request
+        response = requests.get(url, headers=headers)
+        
+        response_data = response.json()
+        print(response_data)
+
         # Pass the JSON data to the template
         context = {
-            "jsonData": jsonData
+            "jsonData": jsonData ,
+            # "response_data" : response_data
         }
 
         return render(request , "farmerdashboard.html", context)
@@ -246,7 +264,7 @@ def farmerdashboard(request):
         ErrorInfo= e.read().decode() 
         print('Error code: ', e.code,ErrorInfo)
         
-    return render(request , 'farmerdashboard.html', context)
+    return render(request , 'farmerdashboard.html')
 
 
 def appointment(request):

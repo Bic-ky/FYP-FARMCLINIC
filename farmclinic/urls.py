@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from account import views
+from . import views as farmclinic_views
 
 
 urlpatterns = [
@@ -25,6 +26,7 @@ urlpatterns = [
     # path('register/', views.register , name="register"),
     path("admin/", admin.site.urls),
     path('home/' , views.index , name="index"),
+    path('contact/' , farmclinic_views.contact , name="contact"),
     
     path('account/',include('account.urls')),
     path('chat/',include('chat.urls')),

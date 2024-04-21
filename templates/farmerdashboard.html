@@ -102,13 +102,28 @@
 </div>
 <!-- end row-->
 
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
 
+                <h3 class="card-title">Soil Information</h3>
+                <p class="card-subtitle mb-4">This is based on your latitude and longitude.</p>
 
-<br><br>
+                <canvas id="piechart"></canvas>
+
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+</div>
+<!-- end row-->
+
+    <br><br>
     <h3 class="mt-100">Weather Information</h3>
     <div class="row ">
         <canvas id="weatherChart" width="700" height="200"></canvas>
     </div>
+
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -174,6 +189,39 @@
         });
     </script>
 
+    <script>
+        // Dynamic data from the API response
+        var api_data = {{ response_data|safe }};
+    
+        // Extract data for the chart
+        var labels = ['Clay', 'Organic Matter', 'Total Nitrogen', 'Boron', 'P2O5', 'Sand'];
+        var values = [
+            parseFloat(api_data.clay.split(' ')[0]),
+            parseFloat(api_data.organicMatter.split(' ')[0]),
+            parseFloat(api_data.totalNitrogen.split(' ')[0]),
+            parseFloat(api_data.boron.split(' ')[0]),
+            parseFloat(api_data.p2o5.split(' ')[0]),
+            parseFloat(api_data.sand.split(' ')[0])
+        ];
+    
+        var ctx = document.getElementById('piechart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: ['#3F51B5', '#00c2b2', '#23b5e2', '#e83e8c', '#f8ac5a', '#FF6384'],
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Soil Properties'
+                }
+            }
+        });
+    </script>
 
 
 
