@@ -24,21 +24,12 @@
 
 
 <body>
-    <!--[if lte IE 9]>
-        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-    <![endif]-->
-
-    <!-- Add your site or application content here -->
 
 <!-- Body main wrapper start -->
 <div class="body-wrapper">
 
     <!-- HEADER AREA START (header-5) -->
     <header class="ltn__header-area ltn__header-5 ltn__header-logo-and-mobile-menu-in-mobile ltn__header-transparent gradient-color-2">
-        <!-- ltn__header-top-area start -->
-       
-        <!-- ltn__header-top-area end -->
-
         <!-- ltn__header-middle-area start -->
         <div class="ltn__header-middle-area ltn__header-sticky ltn__sticky-bg-black">
             <div class="container ">
@@ -61,12 +52,7 @@
                                         <li class="menu-icon"><a href="{% url 'index' %}">Home</a>
 
                                         <li class="menu-icon"><a href="#">About</a>
-                                        </li>
-                                        <li class="menu-icon"><a href="">Market</a>
-                                        </li>
-                                        
-                                            
-                                        </li>
+                                        </li>                                        </li>
                                         <li class="menu-icon"><a href="{% url "contact" %}">Contact</a>
                                             
                                         </li>
@@ -83,8 +69,6 @@
                                             {% endif %}</li>
                                         
                                     </ul>
-                                    
-                                
                             </nav>
                             
                         </div>
@@ -250,8 +234,6 @@
                         <h4 class="footer-title">Services</h4>
                         <div class="footer-menu">
                             <ul>
-                                <li><a href="">Market</a></li>
-                                <li><a href="wishlist.html">Wish List</a></li>
                                 <li><a href="{% url 'account:login' %}">Login</a></li>
                                 
                                 <li><a href="about.html">Terms & Conditions</a></li>
@@ -287,8 +269,7 @@
                                 </div>
                             </form>
                         </div>
-                        <h5 class="mt-30">We Accept</h5>
-                        <img src={% static 'img/icons/khalti.png' %} alt="Payment Image">
+                       
                     </div>
                 </div>
             </div>

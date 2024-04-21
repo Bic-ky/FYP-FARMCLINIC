@@ -32,7 +32,6 @@ def check_role_expert(user):
     else:
         raise PermissionDenied
 
-
 # Restrict the customer from accessing the vendor page
 def check_role_farmer(user):
     if user.role == 2:
@@ -63,8 +62,6 @@ def myAccount(request):
         messages.error(request, 'You need to log in to access your account.')
         return redirect('account:login')
     
-
-
 
 def index(request):
     return render(request, 'index.html' )
@@ -281,12 +278,8 @@ def appointment(request):
             contact = form.cleaned_data['contact']
             date = form.cleaned_data['date']
             experts = form.cleaned_data['experts']
-            
-            # You can then save the data to your database or perform any other actions
-            
-            # Redirect to a success page or return a response
-            # For example:
-            return render(request, 'success.html', {'form': form})
+
+            return render(request, 'index.html', {'form': form})
     else:
         form = AppointmentForm()
    
@@ -294,8 +287,9 @@ def appointment(request):
 
 
 
-        
-
+@login_required     
+def video_call(request):
+    return render(request , "video_call.html", {'name': request.user.full_name})
 
 
 

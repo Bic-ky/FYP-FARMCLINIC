@@ -19,7 +19,9 @@ urlpatterns =[
     path('expertdashboard/',views.expertdashboard, name='expertdashboard'),
     path('farmerdashboard/',views.farmerdashboard, name='farmerdashboard'),
 
+    path('video_call/',views.video_call, name='video_call'),
     path('chat/', include('chat.urls')) ,
+
 
 
     path('forgot_password/', views.forgot_password, name='forgot_password'),
