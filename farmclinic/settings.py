@@ -74,6 +74,8 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 'account.context_processors.get_google_api',
+                'account.context_processors.get_video_call_id',
+                'account.context_processors.get_video_call_key',
                 # 'account.context_processors.get_soil_api',
             ],
         },
@@ -182,3 +184,5 @@ EMAIL_USE_TLS = True
 
 GOOGLE_API_KEY = config('GOOGLE_API')
 
+VIDEO_CALL_ID = config('VIDEO_CALL_ID')
+VIDEO_CALL_ID_KEY = config('VIDEO_CALL_ID_KEY')
