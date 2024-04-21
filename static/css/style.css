@@ -6061,8 +6061,8 @@ opacity: 0.9;}
   width: 100%; }
 
 .slide-title {
-  font-size: 46px;
-  font-weight: 700; }
+  font-size: 98px !important;
+  font-weight: 600; }
 
 /* Slider Animation Start */
 .ltn__slide-animation {

@@ -19,7 +19,9 @@ urlpatterns =[
     path('expertdashboard/',views.expertdashboard, name='expertdashboard'),
     path('farmerdashboard/',views.farmerdashboard, name='farmerdashboard'),
 
-    path('video_call/',views.video_call, name='video_call'),
+    path('meeting/',views.videocall, name='meeting'),
+    path('join_room/',views.join_room, name='join_room'),
+    
     path('chat/', include('chat.urls')) ,
 
 

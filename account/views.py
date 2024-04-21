@@ -287,14 +287,19 @@ def appointment(request):
 
 
 
-@login_required     
-def video_call(request):
-    return render(request , "video_call.html", {'name': request.user.full_name})
+@login_required
+def videocall(request):
+    return render(request, 'video_call.html', {'name': request.user.full_name})
 
 
 
-
-
+@login_required
+def join_room(request):
+    if request.method == 'POST':
+        roomID = request.POST.get('roomID') 
+        if roomID:
+            return redirect("/account/meeting/?roomID=" + roomID)
+    return render(request, 'joinroom.html')
     
 
 
