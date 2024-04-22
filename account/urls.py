@@ -21,7 +21,7 @@ urlpatterns =[
 
     path('meeting/',views.videocall, name='meeting'),
     path('join_room/',views.join_room, name='join_room'),
-    
+
     path('chat/', include('chat.urls')) ,
 
 

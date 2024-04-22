@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col-md-">
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Full Name</h6>
+                </div>
+                <div class="col-sm-9">
+                    {{ user.full_name }}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Email</h6>
+                </div>
+                <div class="col-sm-9 ">
+                    {{ user.email }}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Phone</h6>
+                </div>
+                <div class="col-sm-9 ">
+                    {{ user.phone_number }}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Role</h6>
+                </div>
+                <div class="col-sm-9 ">
+                    {% if user.role %}
+                        {{ user.get_role_display }}
+                    {% else %}
+                        Not specified
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">City</h6>
+                </div>
+                <div class="col-sm-9 ">
+                    {{ user.city }}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Country</h6>
+                </div>
+                <div class="col-sm-9 ">
+                    {{ user.country }}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Latitude</h6>
+                </div>
+                <div class="col-sm-9 ">
+                    {{ user.latitude }}
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <h6 class="mb-0">Longitude</h6>
+                </div>
+                <div class="col-sm-9 ">
+                    {{ user.longitude }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+           
+{% endblock content %}

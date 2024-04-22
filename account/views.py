@@ -8,6 +8,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
 import requests
 
+from account.utils import send_verification_email
+
 from .models import User
 
 from django.contrib.auth.decorators import login_required
@@ -133,10 +135,10 @@ def forgot_password(request):
             # send reset password email
             mail_subject = 'Reset Your Password'
             email_template = 'emails/reset_password_email.html'
-            # send_verification_email(request, user, mail_subject, email_template)
+            send_verification_email(request, user, mail_subject, email_template)
 
             messages.success(request, 'Password reset link has been sent to your email address.')
-            return redirect('login')
+            return redirect('account:login')
         else:
             messages.error(request, 'Account does not exist')
             return redirect('account:forgot_password')
@@ -211,11 +213,17 @@ def expert_change_password(request):
     return render(request, 'change_password.html', {'form': form})
 
 
+
+@login_required
+@user_passes_test(check_role_expert)
 def expertdashboard(request):
+    
+
+    
     return render(request , 'expertdashboard.html')
 
 
-
+@login_required
 @user_passes_test(check_role_farmer)
 def farmerdashboard(request):
     user = request.user
@@ -231,7 +239,7 @@ def farmerdashboard(request):
         # Parse the results as JSON
         jsonData = json.load(ResultBytes)
 
-        access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzNzA5MzU2LCJpYXQiOjE3MTM3MDkwNTYsImp0aSI6ImQ5N2JkNDg4ODczOTQ4MzJhZGYzMTA1NTE4OWRjNGNjIiwidXNlcl9pZCI6NTB9.HjH-FQGqOQmIXozf1StpWDYLSMIRhw7oJm80kMc-R1c'
+        access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzNzc0MjY4LCJpYXQiOjE3MTM3NzM5NjgsImp0aSI6Ijg5ZTc5YmYwYzc1MjRjNmViZmM5OTUwNjQ4YWY4NGZjIiwidXNlcl9pZCI6NTB9.VuXwVDLnRz8p1ZOQEaof8L4H0QzaCGiYa5auG7liPo8'
         
         # URL of the API endpoint
         url = f"https://soil.narc.gov.np/soil/soildata/?lon={lon}&lat={lat}"
@@ -245,10 +253,13 @@ def farmerdashboard(request):
         response_data = response.json()
         print(response_data)
 
+
+        experts = User.objects.filter(role=User.EXPERT)[:3]
         # Pass the JSON data to the template
         context = {
             "jsonData": jsonData ,
-            # "response_data" : response_data
+            "experts" : experts ,
+            "response_data" : response_data
         }
 
         return render(request , "farmerdashboard.html", context)
@@ -261,7 +272,7 @@ def farmerdashboard(request):
         ErrorInfo= e.read().decode() 
         print('Error code: ', e.code,ErrorInfo)
         
-    return render(request , 'farmerdashboard.html')
+    return render(request , 'farmerdashboard.html' )
 
 
 def appointment(request):
@@ -303,7 +314,13 @@ def join_room(request):
     
 
 
-
+@login_required(login_url='login')
+def profile(request):
+    user = request.user
+    context = {
+        'user': user
+    }
+    return render(request, 'profile.html', context)
         
     
 
