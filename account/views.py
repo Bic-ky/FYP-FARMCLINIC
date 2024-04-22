@@ -217,10 +217,23 @@ def expert_change_password(request):
 @login_required
 @user_passes_test(check_role_expert)
 def expertdashboard(request):
-    
+    user = request.user
+    city = user.city
+    country = user.country
+
+    url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}%20%2C%20{country}?unitGroup=metric&include=days%2Calerts&key=F7QME3Z9QPNC9CF24E95EY3QH&contentType=json"
+
+    ResultBytes = urllib.request.urlopen(url)
+
+    jsonData = json.load(ResultBytes)
+
+
+    context = {
+        "jsonData" : jsonData
+    }
 
     
-    return render(request , 'expertdashboard.html')
+    return render(request , 'expertdashboard.html' , context)
 
 
 @login_required
