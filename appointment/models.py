@@ -11,13 +11,13 @@ class Expert(models.Model):
     documents = models.FileField(upload_to='expert_documents/', blank=True)
 
     passport_photo = models.ImageField(
-        upload_to='users/passport_photo', blank=True, null=True)
+        upload_to='experts/passport_photo', blank=True, null=True)
     citizenship_front = models.ImageField(
-        upload_to='users/citicenship_photo', blank=True, null=True)
+        upload_to='experts/citicenship_photo', blank=True, null=True)
     citizenship_back = models.ImageField(
-        upload_to='users/citicenship_photo', blank=True, null=True)
+        upload_to='experts/citicenship_photo', blank=True, null=True)
     citizenship_back = models.ImageField(
-        upload_to='users/license', blank=True, null=True)
+        upload_to='experts/license', blank=True, null=True)
     
     specialty = models.CharField(max_length=100, blank=True)
 
