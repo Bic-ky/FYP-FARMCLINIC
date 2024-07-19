@@ -1,0 +1,142 @@
+{% extends "base1.html" %}
+{% load static %}
+{% block content %}
+
+<div class="ltn__utilize-overlay"></div>
+
+    <!-- BREADCRUMB AREA START -->
+    <div class="ltn__breadcrumb-area text-left bg-white " >
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ltn__breadcrumb-inner">
+                        <div class="ltn__breadcrumb-list">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- BREADCRUMB AREA END -->
+
+    <!-- TEAM AREA START (Team - 3) -->
+    <div class="ltn__team-area pt-120--- pb-90">
+        <div class="container">
+            <div class="row justify-content-center">
+                {% for expert in experts  %}
+                <div class="col-lg-4 col-sm-6">
+                    <div class="ltn__team-item ltn__team-item-3 ltn__team-item-3-2">
+                        <div class="team-img">
+                            <img src="{{ expert.user.user_profile.profile_picture.url}}" alt="Image" height="400" width="400" style="object-fit : contain">
+                        </div>
+                        <div class="team-info">
+                            <h4><a href="team-details.html">{{expert.user.full_name}}</a></h4>
+                            <h6 class="ltn__secondary-color">Specialty: {{ expert.specialty}}</h6>
+                            <div class="ltn__social-media">
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="col-lg-4 col-sm-6">
+                    <div class="ltn__team-item ltn__team-item-3 ltn__team-item-3-2">
+                        <div class="team-img">
+                            <img src="img/team/2.jpg" alt="Image">
+                        </div>
+                        <div class="team-info">
+                            <h4><a href="team-details.html">Kelian Anderson</a></h4>
+                            <h6 class="ltn__secondary-color">Engineering Officer</h6>
+                            <div class="ltn__social-media">
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="ltn__team-item ltn__team-item-3 ltn__team-item-3-2">
+                        <div class="team-img">
+                            <img src="img/team/3.jpg" alt="Image">
+                        </div>
+                        <div class="team-info">
+                            <h4><a href="team-details.html">Miranda H. Halim</a></h4>
+                            <h6 class="ltn__secondary-color">Property Seller</h6>
+                            <div class="ltn__social-media">
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="ltn__team-item ltn__team-item-3 ltn__team-item-3-2">
+                        <div class="team-img">
+                            <img src="img/team/4.jpg" alt="Image">
+                        </div>
+                        <div class="team-info">
+                            <h4><a href="team-details.html">Aiden Benjamin</a></h4>
+                            <h6 class="ltn__secondary-color">Engineering Officer</h6>
+                            <div class="ltn__social-media">
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="ltn__team-item ltn__team-item-3 ltn__team-item-3-2">
+                        <div class="team-img">
+                            <img src="img/team/5.jpg" alt="Image">
+                        </div>
+                        <div class="team-info">
+                            <h4><a href="team-details.html">James Carter</a></h4>
+                            <h6 class="ltn__secondary-color">Engineering Officer</h6>
+                            <div class="ltn__social-media">
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6">
+                    <div class="ltn__team-item ltn__team-item-3 ltn__team-item-3-2">
+                        <div class="team-img">
+                            <img src="img/team/6.jpg" alt="Image">
+                        </div>
+                        <div class="team-info">
+                            <h4><a href="team-details.html">Damble D. Browni</a></h4>
+                            <h6 class="ltn__secondary-color">Engineering Officer</h6>
+                            <div class="ltn__social-media">
+                                <ul>
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- TEAM AREA END -->
+
+
+{% endblock content %}

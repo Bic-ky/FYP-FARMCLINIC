@@ -1,9 +1,4 @@
 from django.db import models
-
-# Create your models here.
-from django.contrib.auth import get_user_model
-from django.db import models
-
 from account.models import User
 from django.db.models import Q
 

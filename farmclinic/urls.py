@@ -16,18 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-
+from django.conf.urls.static import static
 from account import views
+from farmclinic import settings
 from . import views as farmclinic_views
 
 
 urlpatterns = [
     path('', views.index , name="index"),
-    # path('register/', views.register , name="register"),
     path("admin/", admin.site.urls),
     path('home/' , views.index , name="index"),
     path('contact/' , farmclinic_views.contact , name="contact"),
     
     path('account/',include('account.urls')),
-    path('chat/',include('chat.urls')),
-]
+    path('',include('appointment.urls')),
+    path('',include('chat.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -9,12 +9,13 @@ from django.contrib import messages
 import requests
 
 from account.utils import send_verification_email
+from farmclinic.settings import WEATHER_API , VISUALCROSSING_API 
 
-from .models import User
+from .models import User, UserProfile
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-from .forms import AppointmentForm, CustomPasswordChangeForm, LoginForm, RegistrationForm
+from .forms import AppointmentForm, CustomPasswordChangeForm, LoginForm, RegistrationForm, UserForm, UserProfileForm
 from django.shortcuts import render, redirect
 from .forms import LoginForm
 
@@ -27,14 +28,13 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 
 
-# Restrict the vendor from accessing the customer page
 def check_role_expert(user):
     if user.role == 1:
         return True
     else:
         raise PermissionDenied
 
-# Restrict the customer from accessing the vendor page
+
 def check_role_farmer(user):
     if user.role == 2:
         return True
@@ -77,7 +77,7 @@ def register(request):
             user.set_password(form.cleaned_data['password'])
             user.save()
             auth_login(request, user)
-            return redirect('account:myAccount')
+            return redirect('account:login')
     else:
         form = RegistrationForm()
 
@@ -111,19 +111,18 @@ def login_view(request):
 
     return render(request, 'login.html', {'form': form})
 
-    
-#Logout
+ 
 def logout(request):
    auth.logout(request)
    messages.info(request, 'You are logged out.')
    return redirect('account:login')
 
-
+@login_required
 def profile(request):
     return render(request , 'profile.html')
 
 
-#forgot Password Link
+
 def forgot_password(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -146,7 +145,6 @@ def forgot_password(request):
 
 
 def reset_password_validate(request, uidb64, token):
-    # validate the user by decoding the token and user pk
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User._default_manager.get(pk=uid)
@@ -174,44 +172,53 @@ def reset_password(request):
             user.is_active = True
             user.save()
             messages.success(request, 'Password reset successful')
-            return redirect('login')
+            return redirect('account:login')
         else:
             messages.error(request, 'Password do not match!')
             return redirect('account:reset_password')
     return render(request, 'reset_password.html')
 
-
+@login_required
+@user_passes_test(check_role_farmer)
 def farmer_change_password(request):
     if request.method == 'POST':
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Update session
+            update_session_auth_hash(request, user)  
             messages.success(
                 request, 'Your password was successfully updated!')
             logout(request)  # Log out the user
             return redirect('account:farmerdashboard')
     else:
-        # Pass user=request.user to initialize the form with the user's data
         form = CustomPasswordChangeForm(user=request.user)
     return render(request, 'change_password.html', {'form': form})
 
 
+
+@login_required
+@user_passes_test(check_role_expert)
 def expert_change_password(request):
     if request.method == 'POST':
         form = CustomPasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Update session
+            update_session_auth_hash(request, user) 
             messages.success(
                 request, 'Your password was successfully updated!')
             logout(request)  # Log out the user
             return redirect('account:expertdashboard')
     else:
-        # Pass user=request.user to initialize the form with the user's data
         form = CustomPasswordChangeForm(user=request.user)
     return render(request, 'change_password.html', {'form': form})
 
+
+
+import requests
+import urllib.request
+import json
+from django.shortcuts import render
+from django.contrib import messages
 
 
 @login_required
@@ -221,19 +228,53 @@ def expertdashboard(request):
     city = user.city
     country = user.country
 
-    url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}%20%2C%20{country}?unitGroup=metric&include=days%2Calerts&key=F7QME3Z9QPNC9CF24E95EY3QH&contentType=json"
+    visualcrossing_url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}%20%2C%20{country}?unitGroup=metric&include=days%2Calerts&key={VISUALCROSSING_API}&contentType=json"
 
-    ResultBytes = urllib.request.urlopen(url)
+    try:
+        result_bytes = urllib.request.urlopen(visualcrossing_url)
+        jsonData = json.load(result_bytes)
+    except Exception as e:
+        jsonData = {'error': str(e)}
+        messages.error(request, "Error fetching data from VisualCrossing API.")
 
-    jsonData = json.load(ResultBytes)
+    api_key_weather = f'{WEATHER_API}'
+    weatherapi_url = f'http://api.weatherapi.com/v1/current.json?key={api_key_weather}&q={city}'
 
+    try:
+        # Sending WeatherAPI request and getting response
+        response = requests.get(weatherapi_url)
+        data = response.json()
 
-    context = {
-        "jsonData" : jsonData
-    }
+        # Extracting necessary information from the API response
+        location = data['location']['name']
+        temperature = data['current']['temp_c']
+        condition = data['current']['condition']['text']
+        wind_speed = data['current']['wind_kph']
 
-    
-    return render(request , 'expertdashboard.html' , context)
+        weather_data = {
+            'Temperature (°C)': data['current']['temp_c'],
+            'Condition': data['current']['condition']['text'],
+            'Wind Speed (km/h)': data['current']['wind_kph'],
+            'Humidity (%)': data['current']['humidity'],
+            'Pressure (mb)': data['current']['pressure_mb'],
+            'UV Index': data['current']['uv']
+        }
+
+        # Sending data to the template
+        context = {
+            'weather_data' : weather_data ,
+            'location': location,
+            'temperature': temperature,
+            'condition': condition,
+            'wind_speed': wind_speed,
+            'jsonData': jsonData
+        }
+    except Exception as e:
+        messages.error(request, "Error fetching data from WeatherAPI.")
+        context = {'error': str(e)}
+
+    return render(request, 'expertdashboard.html', context)
+
 
 
 @login_required
@@ -248,26 +289,20 @@ def farmerdashboard(request):
         url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}%20%2C%20{country}?unitGroup=metric&include=days%2Calerts&key=F7QME3Z9QPNC9CF24E95EY3QH&contentType=json"
 
         ResultBytes = urllib.request.urlopen(url)
-        
-        # Parse the results as JSON
         jsonData = json.load(ResultBytes)
 
-        access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzNzc0MjY4LCJpYXQiOjE3MTM3NzM5NjgsImp0aSI6Ijg5ZTc5YmYwYzc1MjRjNmViZmM5OTUwNjQ4YWY4NGZjIiwidXNlcl9pZCI6NTB9.VuXwVDLnRz8p1ZOQEaof8L4H0QzaCGiYa5auG7liPo8'
+        access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE2ODc1NzE5LCJpYXQiOjE3MTY4NzU0MTksImp0aSI6IjU5MGI1ZjkzNGVhNDQ2ZDhhZTYxMDQ4ZTJmOTc2NzVjIiwidXNlcl9pZCI6NTB9.cRan0kkbldicavT5pZkEWe5nROVhOe1jdSqaeGcYt4w' 
         
-        # URL of the API endpoint
         url = f"https://soil.narc.gov.np/soil/soildata/?lon={lon}&lat={lat}"
-        
-        # Construct the headers with the access token
+
         headers = {'Authorization': f'Bearer {access_token}'}
-        
-        # Make the GET request
         response = requests.get(url, headers=headers)
         
         response_data = response.json()
         print(response_data)
 
 
-        experts = User.objects.filter(role=User.EXPERT)[:3]
+        experts = User.objects.filter(role=User.EXPERT)[:5]
         # Pass the JSON data to the template
         context = {
             "jsonData": jsonData ,
@@ -334,6 +369,35 @@ def profile(request):
         'user': user
     }
     return render(request, 'profile.html', context)
+
+
+
+def expert_profile(request):
+    profile = get_object_or_404(UserProfile, user=request.user)
+
+    if request.method == 'POST':
+        profile_form = UserProfileForm(request.POST, request.FILES, instance=profile)
+        user_form = UserForm(request.POST, instance=request.user)
+        
+        if profile_form.is_valid() and user_form.is_valid():
+            profile_form.save()
+            user_form.save()
+            messages.success(request, 'Profile updated')
+            return redirect('account:expert_profile')
+        else:
+            print(profile_form.errors)
+            print(user_form.errors)
+    else:
+        profile_form = UserProfileForm(instance=profile)
+        user_form = UserForm(instance=request.user)
+        
+    context = {
+        'profile_form': profile_form,
+        'user_form': user_form,
+        'profile': profile,
+    }
+    return render(request, 'experts/expert_profile.html', context)
+
         
     
 

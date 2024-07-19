@@ -25,15 +25,8 @@
 			<div class="row justify-content-center h-100 ">
 				<div class="col-md-4 col-xl-3 chat h-100 mt-4">
                     <div class="card mb-sm-3 mb-md-0 contacts_card">
-                        
-					<div class="card-header">
-						{% comment %} <div class="input-group">
-							<input type="text" placeholder="Search..." name="" class="form-control search">
-							<div class="input-group-prepend">
-								<span class="input-group-text search_btn"><i class="fas fa-search"></i></span>
-							</div>
-						</div> {% endcomment %}
-					</div>
+                        <span class="text-center"> Logged in as : {{user.full_name}} </span>
+					<div class="card-header"></div>
 					<div class="card-body contacts_body">
                         <img class="mx-auto d-block" src="{% static 'img/logo2.png' %}" height="60" width="130" alt="Dashboard Logo">
 
@@ -50,8 +43,6 @@
                                             {% else %}
                                                 <span>{{ thread.first_person.full_name }}({{thread.second_person.phone_number}}) </span>
                                             {% endif %}
-
-{#                                            <p>Kalid is online</p>#}
                                         </div>
                                     </div>
                                 </li>
@@ -84,10 +75,7 @@
 
                                             <p>{{ thread.chatmessage_thread.all.count }} messages</p>
                                         </div>
-                                        <div class="video_cam">
-                                            <span><i class="fas fa-video"></i></span>
-                                            <span><i class="fas fa-phone"></i></span>
-                                        </div>
+                                       
                                     </div>
                                 </div>
 
@@ -115,10 +103,7 @@
                                             </div>
                                         </div>
                                         {% endif %}
-                                    {% endfor %}
-
-
-                                    <!-- messages -->
+                                    {% endfor %} 
                                 </div>
 
 					        </div>

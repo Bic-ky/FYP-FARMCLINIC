@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -8,7 +7,7 @@
         <title> FarmClinic </title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta content="Connecting Farmers and Agri-Experts " name="description" />
-        <!-- App favicon -->
+
         <link rel="shortcut icon" href="{% static "img/logo.png" %}">
 
         <!-- App css -->
@@ -18,12 +17,6 @@
         <script src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_API_KEY}}&libraries=places&callback=initAutoComplete" async defer></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         
-
-         <!-- Plugins css -->
-        {% comment %} <link href="{% static "assets/plugins/datatables/dataTables.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
-        <link href="{% static "assets/plugins/datatables/responsive.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
-        <link href="{% static "assets/plugins/datatables/buttons.bootstrap4.css" %}" rel="stylesheet" type="text/css" />
-        <link href="{% static "assets/plugins/datatables/select.bootstrap4.css" %}" rel="stylesheet" type="text/css" /> {% endcomment %}
    
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -105,7 +98,8 @@
                 <div data-simplebar class="h-100">
                     <div class="navbar-brand-box">
                         {% comment %} <a href="{% if user.is_authenticated %}{% if user.role == user.ADMIN %}{% url 'account:admindashboard' %}{% else %}{% url 'account:userdashboard' %}{% endif %}{% else %}#{% endif %}" class="logo"> {% endcomment %}
-                            <img src="{% static 'img/logo2.png' %}" height="60" width="130" alt="Dashboard Logo">
+                            <a href="{% url "index" %}" >
+                            <img  src="{% static 'img/logo2.png' %}" height="60" width="130" alt="Dashboard Logo">
                         </a>
                     </div>
                     <!--- Sidemenu -->
@@ -118,6 +112,10 @@
                                 <li>
                                     <a href="{% url "account:expertdashboard" %}" class="waves-effect"><i class="mdi mdi-home-analytics"></i><span>Dashboard</span></a>
                                 </li>
+                                
+                                <li>
+                                    <a href="{% url "account:expert_profile" %}" class="waves-effect"><i class="mdi mdi-account"></i><span>Profile</span></a>
+                                </li>
                                 <li>
                                     <a href="{% url "account:join_room" %}" class="waves-effect"><i class="mdi mdi-phone"></i><span>Join Call</span></a>
                                 </li>
@@ -125,7 +123,7 @@
                                     <a href="{% url "account:meeting" %}" class="waves-effect"><i class="mdi mdi-video"></i><span>Video Call</span></a>
                                 </li>
                                 <li>
-                                    <a href="{% url "chat:message" %}" class="waves-effect"><i class="mdi mdi-message"></i><span>Messages</span></a>
+                                    <a href="{% url "chat" %}" class="waves-effect"><i class="mdi mdi-message"></i><span>Messages</span></a>
                                 </li>
                                 <li>
                                     <a class="waves-effect" href="{% url "account:expert_change_password" %}"><i class="mdi mdi-security"></i><span>Change Password</span></a>
@@ -141,7 +139,7 @@
                                     <a href="{% url "account:meeting" %}" class="waves-effect"><i class="mdi mdi-video"></i><span>Video Call</span></a>
                                 </li>
                                 <li>
-                                    <a href="{% url "chat:message" %}" class="waves-effect"><i class="feather-user"></i><span>Messages</span></a>
+                                    <a href="{% url "chat" %}" class="waves-effect"><i class="feather-user"></i><span>Messages</span></a>
                                 </li>
                                 <li>
                                     <a class="waves-effect" href="{% url "account:farmer_change_password" %}"><i class="mdi mdi-security"></i><span>Change Password</span></a>
@@ -155,16 +153,15 @@
             </div>
             <!-- Left Sidebar End -->
 
-            <!-- ============================================================== -->
-            <!-- Start right Content here -->
-            <!-- ============================================================== -->
             <div class="main-content">
 
                 <div class="page-content">
                     <div class="container-fluid">
-                        <!-- end page title -->
-                        {% block content %}{% endblock content %}
-                    </div> <!-- container-fluid -->
+                        {% block content %}
+                        
+                        
+                        {% endblock content %}
+                    </div> 
                 </div>
                 <!-- End Page-content -->
                 
@@ -200,16 +197,8 @@
         <script src="{% static "assets/js/waves.js" %}"></script>
         <script src="{% static "assets/js/simplebar.min.js" %}"></script>
 
-        
-
-        <!-- Custom Js -->
-        {% comment %} <script src="{% static "assets/pages/dashboard-demo.js" %}"></script>  {% endcomment %}
-
         <!-- App js -->
         <script src="{% static "assets/js/theme.js" %}"></script>
-
-        <!-- Chart Custom Js-->
-        {% comment %} <script src="{% static "assets/pages/chartjs-demo.js" %}"></script> {% endcomment %}
 
         <!-- Include Select2 library -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>

@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "daphne",
+    'jazzmin',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -43,9 +44,7 @@ INSTALLED_APPS = [
     "account",
     "channels",
     "chat",
-    
-    
-    
+    "appointment",
 ]
 
 MIDDLEWARE = [
@@ -76,6 +75,9 @@ TEMPLATES = [
                 'account.context_processors.get_google_api',
                 'account.context_processors.get_video_call_id',
                 'account.context_processors.get_video_call_key',
+                'account.context_processors.get_weather_api',
+                'account.context_processors.get_weather_api',
+                "account.context_processors.get_user_profile",
                 # 'account.context_processors.get_soil_api',
             ],
         },
@@ -87,25 +89,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'farmclinic.wsgi.application'
 ASGI_APPLICATION = 'farmclinic.asgi.application'
 
+
 # CHANNEL_LAYERS = {
 #     'default': {
 #         'BACKEND': 'channels_redis.core.RedisChannelLayer',
 #         'CONFIG': {
-#             "hosts": [('127.0.0.1', 6379)],
+#             "hosts": [('127.0.0.1', 8000)],
 #         },
 #     },
 # }
 
-
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        # 'CONFIG': {
-        #     'hosts': [('127.0.0.1', 6379)],
-        # }
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -156,11 +154,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#media files config
-# MEDIA_URL ='media/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -189,3 +191,9 @@ GOOGLE_API_KEY = config('GOOGLE_API')
 
 VIDEO_CALL_ID = config('VIDEO_CALL_ID')
 VIDEO_CALL_ID_KEY = config('VIDEO_CALL_ID_KEY')
+
+WEATHER_API = config('WEATHER_API')
+VISUALCROSSING_API = config('VISUALCROSSING_API')
+
+SOIL_API = ""
+

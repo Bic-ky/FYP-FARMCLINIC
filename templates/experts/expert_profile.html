@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'includes/alerts.html' %}
+<!-- Main Section Start -->
+
+<div class="col-xl-10">
+	<div class="card pb-5">
+		<div class="card-body">
+			<h2 class=" text-center">Manage Profile</h2>
+			<br>
+			<form action="{% url 'account:expert_profile' %}" method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				
+				{% comment %} profile picture code  {% endcomment %}
+				<div class="text-center">
+					{% if profile.profile_picture %}
+						<img  src="{{ profile.profile_picture.url }}" alt="Profile Picture"  style="max-height: 280px; max-width: 200px; border-radius: 5%;">
+					{% else %}
+						<img src="{% static 'img/logo.png' %}" alt="Profile Picture" style="max-height: 280px; max-width: 200px; border-radius: 5%;"
+						>
+					{% endif %}
+				</div>
+				<div class="text-center">
+					<label><b>Update Profile Picture</b></label>
+					<div class="col-xl-12">
+						<label for="profile-picture" class="btn btn-success btn-rounded waves-effect waves-light" style="background-color: #09c199; color: white;">
+							<i class="fas fa-paperclip"></i> Change Photo
+						  </label>
+						  <input type="file" class="d-none" name="profile_picture" id="profile-picture">
+					</div>
+					<label class="labels">{{ profile_form.profile_picture.errors }}</label>
+				</div>
+        </div>
+        <div class="container">
+			<div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                      <label><b>Phone Number</b></label>
+                      {{ user_form.phone_number }}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                      <label><b>Email</b></label>
+                      {{ user_form.email }}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                      <label><b>Name</b></label>
+                      {{ user_form.full_name }}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                      <label><b>Address</b></label>
+                      {{ user_form.address }}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                      <label><b>City</b></label>
+                      {{ user_form.city }}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                      <label><b>Country</b></label>
+                      {{ user_form.country }}
+                    </div>
+                </div>
+
+			  <div class="col-6">
+				<div class="form-group">
+				  <label><b>Instagram</b></label>
+				  {{ profile_form.instagram }}
+				</div>
+			  </div>
+			  <div class="col-6">
+					<label><b>Twitter</b></label>
+					{{profile_form.twitter}}
+			  </div>
+			  <div class="col-6">
+				<div class="form-group">
+				  <label><b>Linkedin</b></label>
+				  {{ profile_form.linkedin }}
+				</div>
+			  </div>
+			  <div class="col-6">
+				<div class="form-group">
+				  <label><b>Facebook</b></label>
+				  {{ profile_form.facebook }}
+				</div>
+			  </div>
+			</div>
+			<button type="submit" class="btn btn-primary btn-rounded waves-effect waves-light pd-5">Submit</button>
+		  </div>
+				
+			</form>
+
+		</div> <!-- end card-body-->
+	</div> <!-- end card-->
+</div>
+
+<!-- Main Section End -->
+{% endblock content %}

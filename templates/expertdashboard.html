@@ -7,82 +7,72 @@
 </div>
 
 <div class="container-fluid">
-
     <div class="row">
         <div class="col-md-6 col-xl-3">
             <div class="card">
                 <div class="card-body">
                     <div class="mb-4">
-                        <span class="badge badge-soft-primary float-right">Total</span>
-                        <h5 class="card-title mb-0">Total Due</h5>
+                        <h5 class="card-title mb-0">Location</h5>
+                    </div>
+                    <div class="row d-flex align-items-center mb-4">
+                            <h3 class="d-flex align-items-center ml-2 mb-0">
+                                {{location}}
+                            </h3>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5 class="card-title mb-0"> Temperature</h5>
+                    </div>
+                    <div class="row d-flex align-items-center mb-4">
+                            <h3 class="d-flex align-items-center ml-2 mb-0">
+                                {{ temperature }}
+                            </h3>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="col-md-6 col-xl-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5 class="card-title mb-0"> Condition</h5>
                     </div>
                     <div class="row d-flex align-items-center mb-4">
                         
                             <h3 class="d-flex align-items-center ml-2 mb-0">
-                                Rs. 50000000
+                                {{ condition }}
                             </h3>
                     </div>
                 </div>
-                <!--end card body-->
-            </div><!-- end card-->
-        </div> <!-- end col-->
+            </div>
+        </div> 
 
         <div class="col-md-6 col-xl-3">
             <div class="card">
                 <div class="card-body">
                     <div class="mb-4">
-                        <span class="badge badge-soft-primary float-right">Total</span>
-                        <h5 class="card-title mb-0">Total Due</h5>
+                        <h5 class="card-title mb-0"> Wind Speed</h5>
                     </div>
                     <div class="row d-flex align-items-center mb-4">
                         
                             <h3 class="d-flex align-items-center ml-2 mb-0">
-                                Rs. 50000000
+                                {{ wind_speed }}
                             </h3>
                     </div>
                 </div>
-                <!--end card body-->
-            </div><!-- end card-->
-        </div> <!-- end col-->
-
-        <div class="col-md-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="mb-4">
-                        <span class="badge badge-soft-primary float-right">Total</span>
-                        <h5 class="card-title mb-0">Total Due</h5>
-                    </div>
-                    <div class="row d-flex align-items-center mb-4">
-                        
-                            <h3 class="d-flex align-items-center ml-2 mb-0">
-                                Rs. 50000000
-                            </h3>
-                    </div>
-                </div>
-                <!--end card body-->
-            </div><!-- end card-->
-        </div> <!-- end col-->
-
-        <div class="col-md-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="mb-4">
-                        <span class="badge badge-soft-primary float-right">Total</span>
-                        <h5 class="card-title mb-0">Total Due</h5>
-                    </div>
-                    <div class="row d-flex align-items-center mb-4">
-                        
-                            <h3 class="d-flex align-items-center ml-2 mb-0">
-                                Rs. 50000000
-                            </h3>
-                    </div>
-                </div>
-                <!--end card body-->
-            </div><!-- end card-->
-        </div> <!-- end col-->
+              
+            </div>
+        </div> 
     </div>
     <!-- end row-->
-</div> <!-- container-fluid -->
+</div>
+
+
 
 <br><br>
 <h3 class="mt-100">Weather Information</h3>
@@ -90,6 +80,34 @@
     <canvas id="weatherChart" width="700" height="200"></canvas>
 </div>
 
+<br><br>
+<div class="col-xl-12 mt-20">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Agricultural Weather Data for<p class="text-danger fw-bold">{{location}}</p></h4>
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in weather_data.items %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ key }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> 
+        </div>
+    </div>
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -12,13 +12,20 @@
         <!-- Place favicon.png in the root directory -->
         <link rel="shortcut icon" href="{% static 'img/favicon.png' %}" type="image/x-icon" />
         <!-- Font Icons css -->
-        <link rel="stylesheet" href="{% static 'css/font-icons.css' %}"> 
+        <link rel="stylesheet" href="{% static "css/fonts.css" %}">
+        <link rel="stylesheet" href="{% static "css/plugins.css" %}">
+        <link rel="stylesheet" href="{% static "css/font-icons.css" %}">
+        <link rel="stylesheet" href="{% static "css/webfonts.css" %}">
         <!-- plugins css -->
         <link rel="stylesheet" href="{% static 'css/plugins.css' %}">
         <!-- Main Stylesheet -->
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <!-- Responsive css -->
-        <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+        <link rel="stylesheet" href="{% static "css/responsive.css" %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/font-awesome.min.css">
     </head>
     
 
@@ -61,7 +68,7 @@
                                             <a href="{% url 'account:logout' %}">Logout</a></li>
                                             <li style="position: absolute; right: 0;">
                                                 <a href="{% url 'account:myAccount' %}">
-                                                    <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" width="40" height="40" alt="Profile Picture"><span>My Account</span>
+                                                    <img src="{{user.user_profile.profile_picture.url}}" width="40" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; margin-right: 10px;" height="40" alt="Profile Picture"><span>My Account</span>
                                                 </a>
                                             </li>
                                             {% else %}
@@ -108,7 +115,7 @@
         <div class="ltn__utilize-menu-head">
             <div class="site-logo">
                 <img src="{% static 'img/logo2.png' %}" alt="Logo" style="mix-blend-mode: multiply;">
-                <h1 class="mt-70">AGRI-TECH</h1>
+                <h1 class="mt-70">FarmCLinic</h1>
             </div>
             
             <button class="ltn__utilize-close">×</button>
@@ -117,8 +124,8 @@
             <ul>
               <li>
                 {% if not user.is_authenticated %}
-                                      <a  href="{% url 'account:register' %}"><h1 style="color:#E8A430;">Register</h1></a>                  
-                                    {% endif %}
+                    <a  href="{% url 'account:register' %}"><h1 style="color:#E8A430;">Register</h1></a>                  
+                {% endif %}
               </li>
                 <li><a href="{% url 'index' %}">Home</a>
                 </li>
@@ -130,7 +137,7 @@
                     <a href="{% url 'account:logout' %}">Logout</a></li>
                     <li>
                         <a href="{% url 'account:myAccount' %}">
-                            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" alt="Profile Picture"><span>My Account</span>
+                            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" width="40" height="40" alt="Profile Picture"><span>My Account</span>
                         </a>
                     </li>
                     {% else %}
@@ -157,7 +164,7 @@
 </div>
 <!-- Utilize Mobile Menu End -->
 
-    <div class="ltn__utilize-overlay mb-120"></div>
+    <div class="ltn__utilize-overlay "></div>
 
 
     {% block content %}
@@ -166,7 +173,7 @@
 
 
    <!-- FOOTER AREA START -->
-<footer class="ltn__footer-area">
+<footer class="ltn__footer-area pb-0 bottom">
     <div class="footer-top-area  section-bg-2 plr--5" style="background-color:#557A46;">
         <div class="container-fluid">
             <div class="row">
@@ -177,7 +184,7 @@
                                 <img src="{% static 'img/logo2.png' %}" alt="Logo" style="mix-blend-mode: multiply;">
                             </div>
                         </div>
-                        <p>We are a compnay working for the betterment of Farmers and pushing the agriculture sector to a new level.</p>
+                        <p>We are a company working for the betterment of Farmers and pushing the agriculture sector to a new level.</p>
                         <div class="footer-address">
                             <ul>
                                 <li>

@@ -2,6 +2,9 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.hashers import make_password 
+from django.contrib.auth.models import PermissionsMixin
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class UserManager(BaseUserManager):
     def create_user(self, phone_number, password=None, role=None):
@@ -23,7 +26,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
-class User(AbstractBaseUser):
+class User(AbstractBaseUser , PermissionsMixin):
     EXPERT = 1
     FARMER = 2
 
@@ -52,9 +55,8 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = "phone_number"
-
     objects = UserManager()
-
+    
     def __str__(self):
         return str(self.phone_number)
 
@@ -73,19 +75,67 @@ class User(AbstractBaseUser):
     
 
 
-class Appointment(models.Model):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    documents = models.FileField(upload_to='documents/', blank=True, null=True)
-    address = models.CharField(max_length=200)
-    contact = models.CharField(max_length=20)
-    date = models.DateField()
-    experts = models.CharField(max_length=200)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE ,  related_name='user_profile')
+    GENDER_CHOICES = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+    )
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
+
+    profile_picture = models.ImageField(
+        upload_to='users/profile_pictures', blank=True, null=True)
+    
+
+    facebook = models.URLField(max_length=200, blank=True, null=True)
+    linkedin = models.URLField(max_length=200, blank=True, null=True)
+    twitter = models.URLField(max_length=200, blank=True, null=True)
+    instagram = models.URLField(max_length=200, blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+        return str(self.user.phone_number)
+
+    @property
+    def full_name(self):
         return f"{self.first_name} {self.last_name}"
     
 
+@receiver(post_save , sender=User)
+def post_save_create_profile(sender , instance , created , **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+        print("Userprofile was created.")
+    else:
+        try:
+            profile = UserProfile.objects.get(user=instance)
+            print("Userprofile was updated.")
+            profile.save()
+        except:
+            UserProfile.objects.create(user=instance)
+            print("Userprofile was not found so created.")
+    
+from account.models import User
+from appointment.models import Expert
+
+@receiver(post_save, sender=User)
+def create_expert(sender, instance, created, **kwargs):
+    if created and instance.role == User.EXPERT:
+        Expert.objects.create(user=instance)
+        print("Expert was created.")
+    else:
+        try:
+            expert = Expert.objects.get(user=instance)
+            print("Expert was updated.")
+            expert.save()
+        except:
+            Expert.objects.create(user=instance)
+            print("Expert was not found so created.")
 
 
 class Enquiry(models.Model):
