@@ -41,22 +41,6 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
 
 
-class AppointmentForm(forms.Form):
-    first_name = forms.CharField(label='First Name', max_length=100)
-    last_name = forms.CharField(label='Last Name', max_length=100)
-    documents = forms.FileField(label='Documents', required=False)
-    address = forms.CharField(label='Address', max_length=200, widget=forms.Textarea)
-    contact = forms.CharField(label='Contact', max_length=20)
-    date = forms.DateField(label='Date')
-    experts = forms.CharField(label='Experts', max_length=200)
-
-    def __init__(self, *args, **kwargs):
-        super(AppointmentForm, self).__init__(*args, **kwargs)
-        for field_name in self.fields:
-            self.fields[field_name].widget.attrs.update({'class': 'form-control'})
-
-
-
 
 class UserProfileForm(forms.ModelForm):
     profile_picture = forms.ImageField(

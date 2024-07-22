@@ -9,6 +9,8 @@
         <meta content="Connecting Farmers and Agri-Experts " name="description" />
 
         <link rel="shortcut icon" href="{% static "img/logo.png" %}">
+        <!--calendar css-->
+        <link href="{% static "assets/css/fullcalendar.min.css" %}" rel="stylesheet" />
 
         <!-- App css -->
         <link href="{% static "assets/css/bootstrap.min.css" %}" rel="stylesheet" type="text/css" />
@@ -112,6 +114,12 @@
                                 <li>
                                     <a href="{% url "account:expertdashboard" %}" class="waves-effect"><i class="mdi mdi-home-analytics"></i><span>Dashboard</span></a>
                                 </li>
+                                <li>
+                                    <a href="{% url "create_appointment" %}" class="waves-effect"><i class="mdi mdi-calendar"></i><span>Appointments</span></a>
+                                </li>
+                                <li>
+                                    <a href="{% url "appointment_date" %}" class="waves-effect"><i class="mdi mdi-calendar"></i><span>Appointment Date</span></a>
+                                </li>
                                 
                                 <li>
                                     <a href="{% url "account:expert_profile" %}" class="waves-effect"><i class="mdi mdi-account"></i><span>Profile</span></a>
@@ -131,6 +139,9 @@
                             {% elif user.role == user.FARMER %}
                                 <li>
                                     <a href="{% url "account:farmerdashboard" %}" class="waves-effect"><i class="mdi mdi-home-analytics"></i><span>Dashboard</span></a>
+                                </li>
+                                <li>
+                                    <a href="" class="waves-effect"><i class="mdi mdi-calendar"></i><span>Book Appointments</span></a>
                                 </li>
                                 <li>
                                     <a href="{% url "account:join_room" %}" class="waves-effect"><i class="mdi mdi-phone"></i><span>Join Call</span></a>

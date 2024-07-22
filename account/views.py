@@ -15,7 +15,8 @@ from .models import User, UserProfile
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
-from .forms import AppointmentForm, CustomPasswordChangeForm, LoginForm, RegistrationForm, UserForm, UserProfileForm
+from .forms import  CustomPasswordChangeForm, LoginForm, RegistrationForm, UserForm, UserProfileForm
+from appointment.forms import AppointmentForm
 from django.shortcuts import render, redirect
 from .forms import LoginForm
 
