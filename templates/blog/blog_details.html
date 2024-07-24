@@ -1,0 +1,130 @@
+{% extends "base1.html" %}
+
+{% load static %}
+{% block content %}
+<!-- BREADCRUMB AREA START -->
+<div>
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</div>
+<!-- BREADCRUMB AREA END -->
+
+<div class="row justify-content-center" style="margin-top: 200px;">
+    <div class="col-lg-8">
+        <div class="ltn__blog-item ltn__blog-item-5">
+            <div class="ltn__blog-brief border-end-5">
+                <h1>
+                    <a href="{% url 'blog:blog_detail' post.pk %}">{{ post.title }}</a>
+                </h1>
+                <div class="ltn__blog-meta">
+                    <ul>
+                        <li>
+                            <a href="#" title="Quick View" data-toggle="modal">
+                                <i class="far fa-comments"></i>{{ total_comments }} Comments</a>
+                        </li>
+                        <li class="ltn__blog-date">
+                            <i class="far fa-calendar-alt"></i>{{ post.created_at }}
+                        </li>
+                    </ul>
+                </div>
+                <p>{{ post.description }}</p>
+                <div class="ltn__blog-meta-btn">
+                    <div class="ltn__blog-meta">
+                        <ul>
+                            <li class="ltn__blog-author float-end">
+                                <a href="#"><img src="{{ post.author.user_profile.profile_picture.url }}" alt="#">By: {{ post.author.full_name }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <a class="btn btn-success" href="#" title="Quick View" data-toggle="modal" data-target="#quick_view_modal">
+                            <i class="far fa-comments"></i>Post Comment</a>
+                    </div>
+                </div>
+            </div>
+            <div class="ltn__blog-brief border border-3">
+                <h3 class="pl-3">Comments</h3>
+                <div class="ltn__blog-meta clearfix">
+                    {% for comment in comment_page %}
+                    <div class="ltn__blog-meta-btn">
+                        <div class="ltn__blog-meta">
+                            <ul>
+                                <li class="ltn__blog-author float-end">
+                                    <a href="#"><img src="{{ comment.author.user_profile.profile_picture.url }}" alt="#">By: {{ comment.author.full_name }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="ltn__commenter-comment mt-2">
+                        <p class="pl-5">{{ comment.content }}</p>
+                        <hr>
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- Pagination -->
+                <div class="ltn__pagination-area text-center">
+                    <div class="ltn__pagination mb-40">
+                        <ul>
+                            {% if comment_page.has_previous %}
+                            <li><a href="?page=1"><i class="fas fa-angle-double-left"></i></a></li>
+                            <li><a href="?page={{ comment_page.previous_page_number }}"><i class="fas fa-angle-left"></i></a></li>
+                            {% else %}
+                            <li class="disabled"><a><i class="fas fa-angle-double-left"></i></a></li>
+                            <li class="disabled"><a><i class="fas fa-angle-left"></i></a></li>
+                            {% endif %}
+                            {% for num in comment_page.paginator.page_range %}
+                            {% if comment_page.number == num %}
+                            <li class="active"><a>{{ num }}</a></li>
+                            {% else %}
+                            <li><a href="?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                            {% if comment_page.has_next %}
+                            <li><a href="?page={{ comment_page.next_page_number }}"><i class="fas fa-angle-right"></i></a></li>
+                            <li><a href="?page={{ comment_page.paginator.num_pages }}"><i class="fas fa-angle-double-right"></i></a></li>
+                            {% else %}
+                            <li class="disabled"><a><i class="fas fa-angle-right"></i></a></li>
+                            <li class="disabled"><a><i class="fas fa-angle-double-right"></i></a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL AREA START (Quick View Modal) -->
+<div class="ltn__modal-area ltn__quick-view-modal-area">
+    <div class="modal fade" id="quick_view_modal" tabindex="-1">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        <!-- <i class="fas fa-times"></i> -->
+                    </button>
+                </div>
+                <div class="ltn__comment-reply-area ltn__form-box mb-60---">
+                    <form action="{% url 'blog:add_comment' pk=post.pk %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-item input-item-textarea ltn__custom-icon">
+                            <textarea id="comment" name="content" placeholder="Type your comments....">{{ form.content.value }}</textarea>
+                            {% if form.content.errors %}
+                            <div class="error">{{ form.content.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-success"><i class="far fa-comments active"></i> Post Comment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL AREA END -->
+
+{% endblock content %}

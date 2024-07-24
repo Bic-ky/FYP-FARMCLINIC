@@ -20,16 +20,16 @@
     {% if user.is_authenticated %}
         <input type="hidden" id="logged-in-user" value="{{ user.id }}">
     {% endif %}
-		<div class="container-fluid h-100">
-            
-			<div class="row justify-content-center h-100 ">
-				<div class="col-md-4 col-xl-3 chat h-100 mt-4">
+		<div class="container-fluid h-100" style="display: flex; flex-direction: column; justify-content: center;">
+           <a href="{% url "account:myAccount" %}"> <i class="fa fa-home"> Home </i></a>
+			<div class="row justify-content-center" style="height: 90%;">
+				<div class="col-md-4 col-xl-3 chat h-100">
                     <div class="card mb-sm-3 mb-md-0 contacts_card">
-                        <span class="text-center"> Logged in as : {{user.full_name}} </span>
-					<div class="card-header"></div>
+                        <button class="btn btn-primary text-white"><span class="text-center"> Logged in as : {{user.full_name}} </span> </button>
+					<div class="card-header" ></div>
 					<div class="card-body contacts_body">
                         <img class="mx-auto d-block" src="{% static 'img/logo2.png' %}" height="60" width="130" alt="Dashboard Logo">
-
+                        
 						<ui class="contacts">
                             {% for thread in Threads %}
                                 <li class="{% if forloop.first %}active{% endif %} contact-li" chat-id="chat_{{ thread.id }}" style="cursor: pointer">
@@ -41,7 +41,7 @@
                                             {% if thread.first_person == user %}
                                                 <span>{{ thread.second_person.full_name }} ({{thread.second_person.phone_number}})</span>
                                             {% else %}
-                                                <span>{{ thread.first_person.full_name }}({{thread.second_person.phone_number}}) </span>
+                                                <span>{{ thread.first_person.full_name }}({{thread.first_person.phone_number}}) </span>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -51,7 +51,7 @@
 					</div>
 					<div class="card-footer"></div>
 				</div></div>
-				<div class="col-md-8 col-xl-6 chat h-100 mt-4">
+				<div class="col-md-8 col-xl-6 chat h-100 ">
 					<div class="card">
                         {% for thread in Threads %}
                             <div class="messages-wrapper  {% if forloop.first %}hide is_active{% else %}hide{% endif %}" chat-id="chat_{{ thread.id }}" other-user-id="
@@ -61,12 +61,12 @@
                                             {{ thread.first_person.id }}
                                         {% endif %}
                                     ">
-                                <div class="card-header msg_head">
+                                <div class="card-header msg_head" style="display:flex ; align-items: center ;">
                                     <div class="d-flex bd-highlight">
                                         <div class="img_cont">
                                             <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="rounded-circle user_img">
                                         </div>
-                                        <div class="user_info">
+                                        <div class="user_info" style="display:flex ; align-items: center ;">
                                             {% if thread.first_person == user %}
                                                     <span>Chat with {{ thread.second_person.full_name }}</span>
                                             {% else %}
@@ -132,6 +132,6 @@
 		</div>
 
         <script src="{% static 'assets/js/message.js' %}"></script>
-
+    
 	</body>
 </html>

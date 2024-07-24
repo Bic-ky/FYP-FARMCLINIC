@@ -62,10 +62,6 @@ function newMessage(message, sent_by_id, thread_id) {
 			<div class="d-flex mb-4 replied">
 				<div class="msg_cotainer_send">
 					${message}
-					<span class="msg_time_send">8:55 AM, Today</span>
-				</div>
-				<div class="img_cont_msg">
-					<img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="rounded-circle user_img_msg">
 				</div>
 			</div>
 	    `
@@ -73,12 +69,8 @@ function newMessage(message, sent_by_id, thread_id) {
 	else{
 	    message_element = `
            <div class="d-flex mb-4 received">
-              <div class="img_cont_msg">
-                 <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="rounded-circle user_img_msg">
-              </div>
               <div class="msg_cotainer">
                  ${message}
-              <span class="msg_time">8:40 AM, Today</span>
               </div>
            </div>
         `

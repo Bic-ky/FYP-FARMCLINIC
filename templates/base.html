@@ -118,6 +118,9 @@
                                     <a href="{% url "create_appointment" %}" class="waves-effect"><i class="mdi mdi-calendar"></i><span>Appointments</span></a>
                                 </li>
                                 <li>
+                                    <a href="{% url "blog:add_blog_post" %}" class="waves-effect"><i class="mdi mdi-pen"></i><span>Create Blog</span></a>
+                                </li>
+                                <li>
                                     <a href="{% url "appointment_date" %}" class="waves-effect"><i class="mdi mdi-calendar"></i><span>Appointment Date</span></a>
                                 </li>
                                 
@@ -213,10 +216,6 @@
 
         <!-- Include Select2 library -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-
-        
-        <script src="{% static 'assets/js/message.js' %}"></script>
 
 
     </body>

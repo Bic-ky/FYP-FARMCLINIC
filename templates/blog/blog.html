@@ -17,10 +17,11 @@
 </div>
 <!-- BREADCRUMB AREA END -->
 
-
+{% for post in posts %}
 <!-- Blog Item -->
 <div class="row justify-content-center">
     <div class="col-lg-8">
+
         <div class="ltn__blog-item ltn__blog-item-5">
             <div class="ltn__blog-brief">
                 <div class="ltn__blog-meta">
@@ -31,38 +32,38 @@
                     </ul>
                 </div>
                 <h3 class="ltn__blog-title">
-                    <a href="blog-details.html">Lorem ipsum dolor sit amet, consecte cing elit, sed do eiusmod tempor.</a>
+                    <a href="{% url 'blog:blog_detail' post.pk %}">{{ post.title }}</a>
                 </h3>
                 <div class="ltn__blog-meta">
                     <ul>
                         <li>
-                            <a href="#"><i class="far fa-eye"></i>232 Views</a>
+                            <a href="#" title="Quick View" data-toggle="modal" data-target="#quick_view_modal">
+                                <i class="far fa-comments"></i>{{ post.comment_count }}</a>
+                            </a>
                         </li>
-                        <li>
-                            <a href="#"><i class="far fa-comments"></i>35 Comments</a>
-                        </li>
+                        
                         <li class="ltn__blog-date">
-                            <i class="far fa-calendar-alt"></i>June 22, 2020
+                            <i class="far fa-calendar-alt"></i>{{ post.created_at }}
                         </li>
                     </ul>
                 </div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint</p>
+                <p> {{post.description}} </p>
                 <div class="ltn__blog-meta-btn">
                     <div class="ltn__blog-meta">
                         <ul>
                             <li class="ltn__blog-author">
-                                <a href="#"><img src="{{user.user_profile.profile_picture.url}}" alt="#">By: {{user.full_name}}</a>
+                                <a href="#"><img src="{{post.author.user_profile.profile_picture.url}}" alt="#">By: {{ post.author.full_name }}</a>
                             </li>
                         </ul>
                     </div>
                     <div class="ltn__blog-btn">
-                        <a href="blog-details.html"><i class="fas fa-arrow-right"></i>Read more</a>
+                        <a href="{% url "blog:add_comment" pk=post.pk %}"><i class="fas fa-arrow-right"></i>Comment</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+{% endfor %}
 
 {% endblock content %}
